@@ -1,0 +1,33 @@
+{
+  "name": "ml-google-maps-ng",
+  "version": "0.0.1",
+  "description": "AngularJS directives with Google Maps integration for use with MarkLogic REST-api.",
+  "main": "/dist/ml-google-maps-ng.min.js",
+  "dependencies": {
+    "angular": "1.2.14"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.2.14"
+  },
+  "homepage": "https://github.com/grtjn/ml-google-maps-ng",
+  "authors": [
+    "grtjn"
+  ],
+  "keywords": [
+    "angular",
+    "angularjs",
+    "marklogic",
+    "google-maps"
+  ],
+  "license": "Apache v2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "gulpfile.js",
+    "karma.conf.js",
+    "package.json"
+  ]
+}

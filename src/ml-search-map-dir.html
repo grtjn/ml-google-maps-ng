@@ -1,0 +1,38 @@
+<section class="map">
+  <!-- ui-events attribute is currently listing all available events.
+       bounds_changed, center_changed, and drag events are fired continuously while dragging.
+       dragend event is more useful.. -->
+  <div ui-map="map" ui-options="options" ui-event="{
+    'map-bounds_changed': 'boundsChanged()',
+    'map-center_changed': 'centerChanged()',
+    'map-click': 'click()',
+    'map-dblclick': 'dblclick()',
+    'map-drag': 'drag()',
+    'map-dragend': 'dragend()',
+    'map-dragstart': 'dragstart()',
+    'map-heading_changed': 'headingChanged()',
+    'map-idle': 'idle()',
+    'map-maptypeid_changed': 'maptypeidChanged()',
+    'map-mousemove': 'mousemove()',
+    'map-mouseout': 'mouseout()',
+    'map-mouseover': 'mouseover()',
+    'map-projection_changed': 'projectionChanged()',
+    'map-resize': 'resize()',
+    'map-rightclick': 'rightclick()',
+    'map-tilesloaded': 'tilesloaded()',
+    'map-tilt_changed': 'tiltChanged()',
+    'map-zoom_changed': 'zoomChanged()'
+  }" class="map-canvas"></div>
+  
+  <!-- this may look confusing. we have to point the map marker directive
+    at an existing google.maps.Marker object, so it can hook up events -->
+  <div ng-repeat="marker in markers" ui-map-marker="marker"
+    ui-event="{'map-click': 'showResult(marker.title)'}">
+  </div>
+ 
+  <div ui-map-info-window="myInfoWindow">
+    Lat: <input ng-model="currentMarkerLat">, Lng: <input ng-model="currentMarkerLng">
+    <button ng-click="setMarkerPosition(currentMarker, currentMarkerLat, currentMarkerLng)">Update</button>
+  </div>
+ 
+</section>
