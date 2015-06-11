@@ -1,6 +1,6 @@
-# Contributing to slush-marklogic-node
+# Contributing to ml-google-maps-ng
 
-slush-marklogic-node welcomes new contributors. This document will guide you
+ml-google-maps-ng welcomes new contributors. This document will guide you
 through the process.
 
  - [Question or Problem?](#question)
@@ -10,7 +10,7 @@ through the process.
  
 ## <a name="question"></a> Got a Question or Problem?
 
-If you have questions about how to use slush-marklogic-node, check our documentation on the [Wiki][wiki]. Alternatively, check [Stack Overflow][mlstack] to see if it has been answered there, and post your question there if not. Please tag it with both MarkLogic and Slush.
+If you have questions about how to use ml-google-maps-ng, check our documentation on the [Wiki][wiki]. Alternatively, check [Stack Overflow][mlstack] to see if it has been answered there, and post your question there if not. Please tag it with MarkLogic, AngularJS, and Google-Maps.
 
 ## <a name="issue"></a> Found an Issue?
 
@@ -37,22 +37,22 @@ chances of your issue being dealt with quickly:
 
 * **Overview of the Issue** - if an error is being thrown a stack trace helps
 * **Motivation for or Use Case** - explain why this is a bug for you
-* **slush-marklogic-node Version** - is it a named version or from our master branch
-* **Operating System** - Mac, windows? details help
+* **ml-google-maps-ng Version** - is it a named version or from our master branch
+* **Browser** - Chrome, FireFox, Safari? details help
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
   causing the problem (line of code or commit)
 
 ### Submitting a Pull Request
 
-#### Fork slush-marklogic-node
+#### Fork ml-google-maps-ng
 
-Fork the project [on GitHub](https://github.com/marklogic/slush-marklogic-node/fork) and clone
+Fork the project [on GitHub](https://github.com/marklogic/ml-google-maps-ng/fork) and clone
 your copy.
 
 ```sh
-$ git clone git@github.com:username/slush-marklogic-node.git
-$ cd slush-marklogic-node
-$ git remote add upstream git://github.com/marklogic/slush-marklogic-node.git
+$ git clone git@github.com:username/ml-google-maps-ng.git
+$ cd ml-google-maps-ng
+$ git remote add upstream git://github.com/marklogic/ml-google-maps-ng.git
 ```
 
 All bug fixes and new features go into the master branch.
@@ -130,7 +130,7 @@ $ git push origin my-feature-branch
 
 #### Submit the pull request
 
-Go to https://github.com/username/slush-marklogic-node and select your feature branch. Click
+Go to https://github.com/username/ml-google-maps-ng and select your feature branch. Click
 the 'Pull Request' button and fill out the form.
 
 Pull requests are usually reviewed within a few days. If you get comments
@@ -169,8 +169,7 @@ from the main (upstream) repository:
     git pull --ff upstream master
     ```
 
-[wiki]: https://github.com/marklogic/slush-marklogic-node/wiki
+[wiki]: https://github.com/marklogic/ml-google-maps-ng/wiki
 [mlstack]: http://stackoverflow.com/questions/tagged/marklogic
-[issue tracker]: https://github.com/marklogic/slush-marklogic-node/issues
-[mailing list]: http://developer.marklogic.com/mailman/listinfo/roxy
+[issue tracker]: https://github.com/marklogic/ml-google-maps-ng/issues
 [.editorconfig]: http://editorconfig.org/
