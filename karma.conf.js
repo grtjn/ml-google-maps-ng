@@ -29,9 +29,9 @@ module.exports = function(config) {
       'test/spec/**/*.js',
     ],
 
-   reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage'],
 
-   preprocessors: {
+    preprocessors: {
       'src/*.js': ['coverage']
     },
 
