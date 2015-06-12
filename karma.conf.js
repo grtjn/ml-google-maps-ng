@@ -16,7 +16,8 @@ module.exports = function(config) {
     files: [
       // Required libraries
       'bower_components/angular/angular.js',
-
+      'http://maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false&language=en',
+      
       // App under test
       'src/**/*.js',
 
