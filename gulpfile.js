@@ -12,7 +12,8 @@ var gulp = require('gulp'),
     minifyHtml = require('gulp-minify-html'),
     html2Js = require('gulp-ng-html2js'),
     info = require('gulp-print'),
-    clean = require('gulp-clean');
+    clean = require('gulp-clean'),
+    sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('clean', function () {
   return gulp.src([
@@ -37,8 +38,10 @@ gulp.task('minify', ['clean'], function () {
     .pipe(info(function(filepath) {
       return 'minifying: ' + filepath;
     }))
+    .pipe(gulpif('*.css', sourcemaps.init()))
     .pipe(gulpif('*.css', less()))
     .pipe(gulpif('*.css', minifyCss()))
+    .pipe(gulpif('*.css', sourcemaps.write()))
     .pipe(gulpif('*.js', uglify()))
     .pipe(assets.restore())
 
