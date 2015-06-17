@@ -1,0 +1,13 @@
+{
+  "name": "ml-google-maps-ng-gh-pages",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "1.2.28",
+    "angular-route": "1.2.28",
+    "font-awesome": "~4.0.0",
+    "bootstrap": "~3.2.0",
+    "angular-bootstrap": "~0.11.0"
+  },
+  "devDependencies": {
+  }
+}
