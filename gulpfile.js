@@ -4,7 +4,6 @@
 
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
-    rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     useref = require('gulp-useref'),
     gulpif = require('gulp-if'),
@@ -13,18 +12,7 @@ var gulp = require('gulp'),
     minifyHtml = require('gulp-minify-html'),
     html2Js = require('gulp-ng-html2js'),
     info = require('gulp-print'),
-    clean = require('gulp-clean'),
-    csslint = require('gulp-csslint'),
-    util = require('gulp-util'),
-    cssval = require('gulp-css-validator');
-
-var customReporter = function(file) {
-  util.log(util.colors.cyan(file.csslint.errorCount)+' errors in '+util.colors.magenta(file.path));
-
-  file.csslint.results.forEach(function(result) {
-    util.log(result.error.message+' on line '+result.error.line);
-  });
-};
+    clean = require('gulp-clean');
 
 gulp.task('clean', function () {
   return gulp.src([
@@ -49,9 +37,6 @@ gulp.task('minify', ['clean'], function () {
     .pipe(info(function(filepath) {
       return 'minifying: ' + filepath;
     }))
-    //.pipe(gulpif('*.css', cssval()))
-    //.pipe(gulpif('*.css', csslint()))
-    //.pipe(gulpif('*.css', csslint.reporter(customReporter)))
     .pipe(gulpif('*.css', less()))
     .pipe(gulpif('*.css', minifyCss()))
     .pipe(gulpif('*.js', uglify()))
