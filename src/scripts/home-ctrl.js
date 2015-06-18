@@ -39,7 +39,7 @@
     
     $http
       .get('data/geo-facets.json')
-      .then(function(response){
+      .success(function(response){
         model.search = response.data;
       });
 
