@@ -1,9 +1,9 @@
 <h1 class="page-header" itemprop="name">Google Maps for MarkLogic</h1>
 
 <div class="home row">
-  <search-map map="model.searchMap.map" options="model.searchMap.options"
+  <ml-search-map map="model.searchMap.map" options="model.searchMap.options"
               facets="model.search.facets" markers="model.searchMap.markers" bounds-changed="boundsChanged(bounds)"
               show-result="showResult(uri)" show-context-menu="resetMap()" selections="model.searchMap.selections">
-  </search-map>
-  <map-legend facets="model.search.facets"></map-legend>
+  </ml-search-map>
+  <ml-search-map-legend facets="model.search.facets"></ml-search-map-legend>
 </div>
