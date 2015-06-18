@@ -10,19 +10,16 @@
     
     .config([
       '$locationProvider',
-      '$routeProvider',
+      '$urlRouterProvider',
       '$stateProvider',
       mlGoogleMapsApp
     ]);
 
-  function mlGoogleMapsApp($locationProvider, $routeProvider, $stateProvider) {
+  function mlGoogleMapsApp($locationProvider, $urlRouterProvider, $stateProvider) {
 
     $locationProvider.html5Mode(true);
 
-    $routeProvider
-      .otherwise({
-        redirectTo: '/'
-      });
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
       .state('home', {
