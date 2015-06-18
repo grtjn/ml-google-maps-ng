@@ -26,7 +26,6 @@
     $stateProvider
       .state('home', {
         url: '/',
-        reloadOnSearch: false,
         controller: 'mlGoogleMapsDemo.HomeCtrl',
         controllerAs: 'ctrl',
         templateUrl: '/home.html',
@@ -35,7 +34,6 @@
       })
       .state('quickstart', {
         url: '/quickstart',
-        reloadOnSearch: false,
         controller: 'mlGoogleMapsDemo.HomeCtrl',
         controllerAs: 'ctrl',
         templateUrl: '/quickstart.html',
