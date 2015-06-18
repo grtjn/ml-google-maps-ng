@@ -40,7 +40,7 @@
     $http
       .get('data/geo-facets.json')
       .success(function(response){
-        model.search = angular.copy(response.data);
+        model.search = response;
       });
 
     angular
