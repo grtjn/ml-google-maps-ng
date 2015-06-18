@@ -21,7 +21,7 @@
         // model access
         facets: '=facets'
       },
-      templateUrl: 'ml-search-map-legend-dir.html',
+      templateUrl: '/ml-google-maps-ng/ml-search-map-legend-dir.html',
       link: function($scope, $element, $attrs) {
       }
     };

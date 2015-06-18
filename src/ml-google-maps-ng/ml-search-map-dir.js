@@ -104,7 +104,7 @@
         parentShowResult: '&showResult',
         parentShowContextMenu: '&showContextMenu'
       },
-      templateUrl: 'ml-search-map-dir.html',
+      templateUrl: '/ml-google-maps-ng/ml-search-map-dir.html',
       link: function($scope, $element, $attrs, $controller) {
         
         // watch for model changes in parent
