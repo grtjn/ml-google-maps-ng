@@ -21,10 +21,39 @@ gulp.task('clean', function () {
       'scripts/*.min.js',
       'styles/*.min.css'
     ], {read: false})
+    .pipe(info(function(filepath) {
+      return 'deleting: ' + filepath;
+    }))
     .pipe(clean());
 });
 
-gulp.task('minify', ['clean'], function () {
+gulp.task('templates', ['clean'], function() {
+  return gulp.src([
+      'src/**/*.html',
+      '!src/index.html'
+    ])
+    .pipe(info(function(filepath) {
+      return 'minifying: ' + filepath;
+    }))
+    .pipe(minifyHtml({
+      empty: true,
+      spare: true,
+      quotes: true
+    }))
+    .pipe(html2Js({
+      moduleName: 'mlGoogleMapsDemoTpls',
+      prefix: '/'
+    }))
+    .pipe(concat('main-tpls.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('scripts'))
+    .pipe(info(function(filepath) {
+      return 'writing: ' + filepath;
+    }))
+  ;
+});
+
+gulp.task('minify', ['templates'], function () {
   var assets = useref.assets();
 
   return gulp.src([
@@ -48,25 +77,9 @@ gulp.task('minify', ['clean'], function () {
     .pipe(useref())
     .pipe(gulp.dest('./'))
     .pipe(info(function(filepath) {
-      return 'written: ' + filepath;
+      return 'writing: ' + filepath;
     }))
   ;
-});
-
-gulp.task('templates', [], function() {
-  return gulp.src([ './src/**/*.html' ])
-    .pipe(minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe(html2Js({
-      moduleName: 'ml.google-maps.tpls',
-      prefix: '/ml-google-maps'
-    }))
-    .pipe(concat('ml-google-maps-ng-tpls.min.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('default', ['minify']);

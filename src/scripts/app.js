@@ -2,10 +2,11 @@
   'use strict';
   
   angular
-    .module('mlGoogleMapsApp', [
+    .module('mlGoogleMapsDemoApp', [
       'ui.router',
       'ui.bootstrap',
-      'uiGmapgoogle-maps'
+      'uiGmapgoogle-maps',
+      'mlGoogleMapsDemoTpls'
     ])
     
     .config([
@@ -15,7 +16,7 @@
       mlGoogleMapsApp
     ]);
 
-  function mlGoogleMapsApp($locationProvider, $urlRouterProvider, $stateProvider) {
+  function mlGoogleMapsDemoApp($locationProvider, $urlRouterProvider, $stateProvider) {
 
     $locationProvider.html5Mode(true);
 
