@@ -14,7 +14,8 @@
     "gulp-if": "^1.2.5",
     "gulp-clean": "^0.3.1",
     "gulp-print": "^1.1.0",
-    "gulp-sourcemaps": "^1.5.2"
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-rename": "^1.2.2"
   },
   "engines": {
     "node": ">=0.8.0"

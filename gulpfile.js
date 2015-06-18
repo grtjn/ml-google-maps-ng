@@ -13,7 +13,8 @@ var gulp = require('gulp'),
     html2Js = require('gulp-ng-html2js'),
     info = require('gulp-print'),
     clean = require('gulp-clean'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+    rename = require('gulp-rename');
 
 gulp.task('clean', function () {
   return gulp.src([
@@ -69,9 +70,9 @@ gulp.task('minify', ['templates'], function () {
     }))
     .pipe(gulpif('*.css', sourcemaps.init()))
     .pipe(gulpif('*.css', less()))
-    .pipe(gulpif('*.css', minifyCss()))
+    //.pipe(gulpif('*.css', minifyCss()))
     .pipe(gulpif('*.css', sourcemaps.write()))
-    .pipe(gulpif('*.js', uglify()))
+    //.pipe(gulpif('*.js', uglify()))
     .pipe(assets.restore())
 
     .pipe(useref())
