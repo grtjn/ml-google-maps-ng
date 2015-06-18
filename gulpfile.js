@@ -57,7 +57,7 @@ gulp.task('minify', ['templates'], function () {
   var assets = useref.assets();
 
   return gulp.src([
-      'src/*.html'
+      'src/index.html'
     ])
     .pipe(info(function(filepath) {
       return 'processing: ' + filepath;

@@ -6,6 +6,7 @@
       'ui.router',
       'ui.bootstrap',
       'uiGmapgoogle-maps',
+      'ml.google-maps',
       'hljs',
       'mlGoogleMapsDemo.Tpls'
     ])
