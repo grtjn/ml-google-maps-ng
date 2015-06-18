@@ -3,6 +3,16 @@
   'use strict';
 
   angular.module('ml.google-maps')
+  .filter('object2Array', function() {
+    return function(input) {
+      var out = [];
+      for (var name in input) {
+        input[name].__key = name;
+        out.push(input[name]);
+      }
+      return out;
+    };
+  })
   .filter('hasBoxes', function() {
     return function(input,facet) {
       var out = [];

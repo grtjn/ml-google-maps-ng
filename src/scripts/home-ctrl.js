@@ -28,29 +28,37 @@
     
     .controller('mlGoogleMapsDemo.HomeCtrl', [
       '$scope',
+      '$http',
       '$location',
       '$window',
       'HomeModel',
       HomeCtrl
     ]);
   
-  function HomeCtrl($scope, $location, $window, model) {
+  function HomeCtrl($scope, $http, $location, $window, model) {
+    
+    $http
+      .get('data/geo-facets.json')
+      .then(function(response){
+        model.search = response.data;
+      });
 
-    angular.extend($scope, {
-      model: model,
-      boundsChanged: function() {
-      },
-      resetMap: function() {
-        angular.extend(model.searchMap.options, model.searchMap.initOptions);
-        angular.forEach(model.searchMap.selections, function(overlay, index) {
-          overlay.setMap(null);
-        });
-        model.searchMap.selections.length = 0;
-      },
-      showResult: function(uri) {
-        $window.alert('You clicked ' + uri);
-      }
-    });
+    angular
+      .extend($scope, {
+        model: model,
+        boundsChanged: function() {
+        },
+        resetMap: function() {
+          angular.extend(model.searchMap.options, model.searchMap.initOptions);
+          angular.forEach(model.searchMap.selections, function(overlay, index) {
+            overlay.setMap(null);
+          });
+          model.searchMap.selections.length = 0;
+        },
+        showResult: function(uri) {
+          $window.alert('You clicked ' + uri);
+        }
+      });
 
   }
   
