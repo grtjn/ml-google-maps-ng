@@ -33,7 +33,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
 </head>
-<body ng-app="angularGoogleMapsApp">
+<body ng-app="mlGoogleMapsApp">
 <!--[if lte IE 8]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
@@ -88,19 +88,21 @@
 
     <!-- vendor.min.js is generated using gulp -->
     <!-- build:js scripts/vendor.min.js -->
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="../bower_components/jquery/dist/jquery.js"></script>
-
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/lodash/lodash.js"></script>
+
     <!-- endbuild -->
 
     <!-- main.min.js is generated using gulp -->
     <!-- build:js scripts/main.min.js -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/test.js"></script>
+    <script src="scripts/home-ctrl.js"></script>
     <!-- endbuild -->
 </body>
 </html>
