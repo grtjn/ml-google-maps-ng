@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('mlGoogleMapsApp')
+  angular.module('mlGoogleMapsDemo')
   
     .factory('HomeModel', [function () {
       return {
@@ -15,7 +15,7 @@
       };
     }])
     
-    .controller('HomeCtrl', [
+    .controller('mlGoogleMapsDemo.HomeCtrl', [
       '$scope',
       '$location',
       'HomeModel',

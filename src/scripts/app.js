@@ -2,21 +2,21 @@
   'use strict';
   
   angular
-    .module('mlGoogleMapsDemoApp', [
+    .module('mlGoogleMapsDemo', [
       'ui.router',
       'ui.bootstrap',
       'uiGmapgoogle-maps',
-      'mlGoogleMapsDemoTpls'
+      'mlGoogleMapsDemo.Tpls'
     ])
     
     .config([
       '$locationProvider',
       '$urlRouterProvider',
       '$stateProvider',
-      mlGoogleMapsApp
+      App
     ]);
 
-  function mlGoogleMapsDemoApp($locationProvider, $urlRouterProvider, $stateProvider) {
+  function App($locationProvider, $urlRouterProvider, $stateProvider) {
 
     $locationProvider.html5Mode(true);
 
@@ -26,7 +26,7 @@
       .state('home', {
         url: '/',
         reloadOnSearch: false,
-        controller: 'HomeCtrl',
+        controller: 'mlGoogleMapsDemo.HomeCtrl',
         controllerAs: 'ctrl',
         templateUrl: '/home.html',
         resolve: {
