@@ -31,7 +31,17 @@
         templateUrl: '/home.html',
         resolve: {
         }
-      });
+      })
+      .state('quickstart', {
+        url: '/quickstart',
+        reloadOnSearch: false,
+        controller: 'mlGoogleMapsDemo.HomeCtrl',
+        controllerAs: 'ctrl',
+        templateUrl: '/quickstart.html',
+        resolve: {
+        }
+      })
+    ;
       
   }
 })();
