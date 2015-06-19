@@ -14,13 +14,14 @@ var gulp = require('gulp'),
     info = require('gulp-print'),
     clean = require('gulp-clean'),
     sourcemaps = require('gulp-sourcemaps'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    replace = require('gulp-replace');
 
 gulp.task('clean', function () {
   return gulp.src([
-      'index.html',
-      'scripts/*.min.js',
-      'styles/*.min.css'
+      'index*.html',
+      'scripts/*',
+      'styles/*'
     ], {read: false})
     .pipe(info(function(filepath) {
       return 'deleting: ' + filepath;
@@ -45,7 +46,14 @@ gulp.task('templates', ['clean'], function() {
       moduleName: 'mlGoogleMapsDemo.Tpls',
       prefix: '/'
     }))
-    .pipe(concat('main-tpls.min.js'))
+    
+    .pipe(concat('main-tpls.js'))
+    .pipe(gulp.dest('scripts'))
+    .pipe(info(function(filepath) {
+      return 'writing: ' + filepath;
+    }))
+    
+    .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest('scripts'))
     .pipe(info(function(filepath) {
@@ -54,12 +62,29 @@ gulp.task('templates', ['clean'], function() {
   ;
 });
 
-gulp.task('minify', ['templates'], function () {
-  var assets = useref.assets();
-
+gulp.task('copy-index', ['templates'], function () {
   return gulp.src([
       'src/index.html'
     ])
+    .pipe(info(function(filepath) {
+      return 'copying: ' + filepath;
+    }))
+    .pipe(gulp.dest('./'))
+    .pipe(rename({suffix: '-dev'}))
+    .pipe(replace(/@suffix/g, ''))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('minify', ['copy-index'], function () {
+  var assets = useref.assets();
+  var wiredep = require('wiredep').stream;
+  
+  return gulp.src([
+      'index*.html'
+    ])
+    .pipe(replace(/@suffix/g, '.min'))
+    .pipe(gulp.dest('./')) // This makes sure wiredep can properly inject all dependencies!
+    .pipe(wiredep())
     .pipe(info(function(filepath) {
       return 'processing: ' + filepath;
     }))
@@ -68,11 +93,11 @@ gulp.task('minify', ['templates'], function () {
     .pipe(info(function(filepath) {
       return 'minifying: ' + filepath;
     }))
-    .pipe(gulpif('*.css', sourcemaps.init()))
+    .pipe(gulpif('*.min.css', sourcemaps.init()))
     .pipe(gulpif('*.css', less()))
-    //.pipe(gulpif('*.css', minifyCss()))
-    .pipe(gulpif('*.css', sourcemaps.write()))
-    //.pipe(gulpif('*.js', uglify()))
+    .pipe(gulpif('*.min.css', minifyCss()))
+    .pipe(gulpif('*.min.css', sourcemaps.write()))
+    .pipe(gulpif('*.min.js', uglify()))
     .pipe(assets.restore())
 
     .pipe(useref())

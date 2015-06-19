@@ -18,16 +18,15 @@
     <title>MarkLogic Google Maps</title>
 
     <!-- vendor.min.css is generated using gulp -->
-    <!-- build:css styles/vendor.min.css -->
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="../bower_components/highlightjs/styles/github.css">
+    <!-- build:css styles/vendor@suffix.css -->
+      <!-- bower:css -->
+      <!-- endbower -->
     <!-- endbuild -->
     
     <!-- main.min.css is generated using gulp -->
-    <!-- build:css styles/main.min.css -->
-    <link rel="stylesheet/less" type="text/less" href="ml-google-maps-ng/ml-google-maps-ng.less">
-    <link rel="stylesheet/less" type="text/less" href="styles/home.less">
+    <!-- build:css styles/main@suffix.css -->
+      <link rel="stylesheet/less" type="text/less" href="src/ml-google-maps-ng/ml-google-maps-ng.less">
+      <link rel="stylesheet/less" type="text/less" href="src/styles/home.less">
     <!-- endbuild -->
 
     <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic" rel="stylesheet">
@@ -90,38 +89,22 @@
     <!--ng-include src="'views/footer.html'"></ng-include-->
 
     <!-- vendor.min.js is generated using gulp -->
-    <!-- build:js scripts/vendor.min.js -->
-    <script src="../bower_components/jquery/dist/jquery.js"></script>
-    
-    <script src="../bower_components/angular/angular.js"></script>
-    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    
-    <script src="../bower_components/highlightjs/highlight.pack.js"></script>
-    <script src="../bower_components/angular-highlightjs/angular-highlightjs.js"></script>
-    
-    <!-- ml-google-maps-ng js dependencies: -->
-    <script src="../bower_components/lodash/lodash.js"></script>
-    <script src="../bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
-    
-    <!-- to be replaced with ml-google-maps-ng -->
-    <script src="../bower_components/angular-ui-utils/ui-utils.js"></script>
-    <script src="../bower_components/angular-ui-map/ui-map.js"></script>
+    <!-- build:js scripts/vendor@suffix.js -->
+      <!-- bower:js -->
+      <!-- endbower -->
     <!-- endbuild -->
     
     <!-- main.min.js is generated using gulp -->
-    <!-- build:js scripts/main.min.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/home-ctrl.js"></script>
-    <script src="ml-google-maps-ng/ml-google-maps.js"></script>
-    <script src="ml-google-maps-ng/ml-search-map-dir.js"></script>
-    <script src="ml-google-maps-ng/ml-search-map-legend-dir.js"></script>
+    <!-- build:js scripts/main@suffix.js -->
+      <script src="src/scripts/app.js"></script>
+      <script src="src/scripts/home-ctrl.js"></script>
+      <script src="src/ml-google-maps-ng/ml-google-maps.js"></script>
+      <script src="src/ml-google-maps-ng/ml-search-map-dir.js"></script>
+      <script src="src/ml-google-maps-ng/ml-search-map-legend-dir.js"></script>
     <!-- endbuild -->
+    
     <!-- main-tpls.min.js is generated using gulp -->
-    <script src="scripts/main-tpls.min.js"></script>
+    <script src="scripts/main-tpls@suffix.js"></script>
     
   </body>
 </html>
