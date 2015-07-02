@@ -14,14 +14,14 @@
       return out;
     };
   })
-  .directive('mlSearchMapLegend', [function () {
+  .directive('mlGoogleSearchMapLegend', [function () {
     return {
       restrict: 'E',
       scope: {
         // model access
         facets: '=facets'
       },
-      templateUrl: 'ml-search-map-legend-dir.html',
+      templateUrl: '/ml-google-maps-ng/ml-google-search-map-legend.html',
       link: function($scope, $element, $attrs) {
       }
     };

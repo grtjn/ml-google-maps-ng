@@ -1,8 +1,148 @@
 (function() {
   'use strict';
 
-  angular.module('ml.google-maps', []);
+  angular.module('ml.google-maps', ['ui.map', 'ml.google-maps.tpls']);
 
+}());
+
+(function () {
+  'use strict';
+
+  angular.module('ml.google-maps')
+  .factory('GoogleMaps', ['$window', function($window) {
+    return $window.google.maps;
+  }]);
+
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('ml.google-maps')
+  .factory('MLGoogleMapMarkerFactory', ['GoogleMaps', MLGoogleMapMarkerFactory]);
+  
+  function MLGoogleMapMarkerFactory($googleMaps) {
+    
+    /** @constructor */
+    function GoogleMapClusterMarker(bounds, map, count, icon) {
+      // Now initialize all properties.
+      this.bounds_ = bounds;
+      this.map_ = map;
+      this.count_ = count;
+      this.icon_ = icon;
+
+      // We define a property to hold the image's div. We'll
+      // actually create this div upon receipt of the onAdd()
+      // method so we'll leave it null for now.
+      this.div_ = null;
+
+      // Explicitly call setMap on this overlay
+      this.setMap(map);
+
+      return this;
+    }
+
+    GoogleMapClusterMarker.prototype = new $googleMaps.OverlayView();
+
+    GoogleMapClusterMarker.prototype.onAdd = function() {
+      // Note: an overlay's receipt of onAdd() indicates that
+      // the map's panes are now available for attaching
+      // the overlay to the map via the DOM.
+
+      // Create the DIV and set some basic attributes.
+      var div = document.createElement('div');
+      div.className = 'map-cluster-icon icon' + this.icon_;
+
+      // Create an IMG element and attach it to the DIV.
+      div.innerHTML= '<span>' + this.count_ + '</span>';
+
+      // Set the overlay's div_ property to this DIV
+      this.div_ = div;
+
+      // We add an overlay to a map via one of the map's panes.
+      // We'll add this overlay to the overlayLayer pane.
+      var panes = this.getPanes();
+      panes.overlayLayer.appendChild(div);
+    };
+
+    GoogleMapClusterMarker.prototype.draw = function() {
+      // Size and position the overlay. We use a southwest and northeast
+      // position of the overlay to peg it to the correct position and size.
+      // We need to retrieve the projection from this overlay to do this.
+      var overlayProjection = this.getProjection();
+
+      // Retrieve the center coordinates of this overlay
+      // in latlngs and convert them to pixels coordinates.
+      var center = overlayProjection.fromLatLngToDivPixel(this.bounds_.getCenter());
+      var size = 30 + (''+this.count_).length * 10;
+
+      // Resize the image's DIV to fit the indicated dimensions.
+      var div = this.div_;
+      if (div) {
+        div.style.left = Math.round(center.x - size / 2) + 'px';
+        div.style.top = Math.round(center.y - size / 2) + 'px';
+        div.style.width = size + 'px';
+        div.style.height = size + 'px';
+        div.style.lineHeight = size + 'px';
+        div.style.backgroundSize = '100%';
+      } else {
+        // should never be reached??
+      }
+    };
+
+    GoogleMapClusterMarker.prototype.onRemove = function() {
+      if (this.div_) {
+        this.div_.parentNode.removeChild(this.div_);
+        this.div_ = null;
+      }
+    };
+
+    return {
+      createMarker: function(map, box, index, icon) {
+        var bounds = new $googleMaps.LatLngBounds(new $googleMaps.LatLng(box.s, box.w), new $googleMaps.LatLng(box.n, box.e));
+        if (box.count === 1 && box.uri) {
+          return new $googleMaps.Marker({
+            position: bounds.getCenter(),
+            map: map,
+            title: box.uri,
+            icon: '/images/map/p'+icon+'.png'
+          });
+        } else {
+          return new GoogleMapClusterMarker(bounds, map, box.count, icon);
+        }
+      }
+    };
+  }
+})();
+
+(function () {
+
+  'use strict';
+
+  angular.module('ml.google-maps')
+  .filter('hasBoxes', function() {
+    return function(input,facet) {
+      var out = [];
+      angular.forEach(input, function(facet) {
+        if (facet && facet.boxes) {
+          out.push(facet);
+        }
+      });
+      return out;
+    };
+  })
+  .directive('mlGoogleSearchMapLegend', [function () {
+    return {
+      restrict: 'E',
+      scope: {
+        // model access
+        facets: '=facets'
+      },
+      templateUrl: '/ml-google-maps-ng/ml-google-search-map-legend.html',
+      link: function($scope, $element, $attrs) {
+      }
+    };
+  }]);
 }());
 
 /* global google */
@@ -11,91 +151,11 @@
 
   'use strict';
   
-  // gracefull decay in case Google is unreachable
-  // [GJo] doesn't work!
-  // var google = google || {};
-  // google.maps = google.maps || {};
-  // google.maps.OverlayView = google.maps.OverlayView || function(){};
-
-  /** @constructor */
-  function MapClusterIcon(bounds, map, count, icon) {
-    // Now initialize all properties.
-    this.bounds_ = bounds;
-    this.map_ = map;
-    this.count_ = count;
-    this.icon_ = icon;
-
-    // We define a property to hold the image's div. We'll
-    // actually create this div upon receipt of the onAdd()
-    // method so we'll leave it null for now.
-    this.div_ = null;
-
-    // Explicitly call setMap on this overlay
-    this.setMap(map);
-  
-    return this;
-  }
-
-  MapClusterIcon.prototype = new google.maps.OverlayView();
-
-  MapClusterIcon.prototype.onAdd = function() {
-    // Note: an overlay's receipt of onAdd() indicates that
-    // the map's panes are now available for attaching
-    // the overlay to the map via the DOM.
-
-    // Create the DIV and set some basic attributes.
-    var div = document.createElement('div');
-    div.className = 'map-cluster-icon icon' + this.icon_;
-
-    // Create an IMG element and attach it to the DIV.
-    div.innerHTML= '<span>' + this.count_ + '</span>';
-
-    // Set the overlay's div_ property to this DIV
-    this.div_ = div;
-
-    // We add an overlay to a map via one of the map's panes.
-    // We'll add this overlay to the overlayLayer pane.
-    var panes = this.getPanes();
-    panes.overlayLayer.appendChild(div);
-  };
-
-  MapClusterIcon.prototype.draw = function() {
-    // Size and position the overlay. We use a southwest and northeast
-    // position of the overlay to peg it to the correct position and size.
-    // We need to retrieve the projection from this overlay to do this.
-    var overlayProjection = this.getProjection();
-
-    // Retrieve the center coordinates of this overlay
-    // in latlngs and convert them to pixels coordinates.
-    var center = overlayProjection.fromLatLngToDivPixel(this.bounds_.getCenter());
-    var size = 30 + (''+this.count_).length * 10;
-
-    // Resize the image's DIV to fit the indicated dimensions.
-    var div = this.div_;
-    if (div) {
-      div.style.left = Math.round(center.x - size / 2) + 'px';
-      div.style.top = Math.round(center.y - size / 2) + 'px';
-      div.style.width = size + 'px';
-      div.style.height = size + 'px';
-      div.style.lineHeight = size + 'px';
-      div.style.backgroundSize = '100%';
-    } else {
-      // should never be reached??
-    }
-  };
-
-  MapClusterIcon.prototype.onRemove = function() {
-    if (this.div_) {
-      this.div_.parentNode.removeChild(this.div_);
-      this.div_ = null;
-    }
-  };
-  
   angular.module('ml.google-maps')
-  .directive('mlSearchMap', ['$timeout', function ($timeout) {
+  .directive('mlGoogleSearchMap', ['$timeout', function ($timeout) {
     return {
       restrict: 'E',
-      controller: 'MLSearchMapController',
+      controller: 'MLGoogleSearchMapController',
       scope: {
         // model access
         map: '=map',
@@ -111,7 +171,7 @@
         parentShowResult: '&showResult',
         parentShowContextMenu: '&showContextMenu'
       },
-      templateUrl: 'ml-search-map-dir.html',
+      templateUrl: '/ml-google-maps-ng/ml-google-search-map.html',
       link: function($scope, $element, $attrs, $controller) {
         
         // watch for model changes in parent
@@ -192,7 +252,7 @@
       }
     };
   }])
-  .controller('MLSearchMapController', ['$scope', '$timeout', function($scope, $timeout) {
+  .controller('MLSearchMapController', ['MLGoogleMapMarkerFactory', '$scope', '$timeout', function(markerFactory, $scope, $timeout) {
     
     // keep a copy of original options
     var initOptions = {};
@@ -209,12 +269,12 @@
       
         if (facet && facet.boxes) {
           i++;
-          // jshint ignore:start
           // No delayed execution here, this is safe..
+          /* jshint loopfunc: true */
           angular.forEach(facet.boxes, function(box, index) {
-            $scope.markers.push(getMapMarker(box, index, i));
+            $scope.markers.push(markerFactory.createMapMarker($scope.map, box, index, i));
           });
-          // jshint ignore:end
+          /* jshint loopfunc: false */
         }
       }
     }
@@ -225,19 +285,6 @@
           marker.setMap(null);
         });
         $scope.markers.length = 0;
-      }
-    }
-    function getMapMarker(box, index, icon) {
-      var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(box.s, box.w), new google.maps.LatLng(box.n, box.e));
-      if (box.count === 1 && box.uri) {
-        return new google.maps.Marker({
-          position: bounds.getCenter(),
-          map: $scope.map,
-          title: box.uri,
-          icon: '/images/map/p'+icon+'.png'
-        });
-      } else {
-        return new MapClusterIcon(bounds, $scope.map, box.count, icon);
       }
     }
     
@@ -258,7 +305,7 @@
               $scope.overlays.push(overlay);
             });
           }
-          addMapMarkers(facets, getMapMarker);
+          addMapMarkers(facets);
           
           if (!$scope.drawingManager) {
             $scope.drawingManager = new google.maps.drawing.DrawingManager({
@@ -311,7 +358,7 @@
     
     // watch for broadcasts
     
-    $scope.$on('searchmap.refresh', function () {
+    $scope.$on('ml-google-search-map.refresh', function () {
       // prevent 'digest already in progress messages' by using timeout with false
       $timeout(function() {
         initCenter();
@@ -343,32 +390,26 @@
   }]);
 }());
 
-(function () {
+(function(module) {
+try {
+  module = angular.module('ml.google-maps.tpls');
+} catch (e) {
+  module = angular.module('ml.google-maps.tpls', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('/ml-google-maps-ng/ml-google-search-map-legend.html',
+    '<div class="map-legend"><span ng-repeat="(index, facet) in facets | object2Array | hasBoxes"><span ng-class="{0: \'map-cluster-icon icon1\', 1: \'map-cluster-icon icon2\', 2: \'map-cluster-icon icon3\', 3: \'map-cluster-icon icon4\', 4: \'map-cluster-icon icon5\' }[index]"></span> <label>{{facet.label ? facet.label : facet.__key}}</label></span></div>');
+}]);
+})();
 
-  'use strict';
-
-  angular.module('ml.google-maps')
-  .filter('hasBoxes', function() {
-    return function(input,facet) {
-      var out = [];
-      angular.forEach(input, function(facet) {
-        if (facet && facet.boxes) {
-          out.push(facet);
-        }
-      });
-      return out;
-    };
-  })
-  .directive('mlSearchMapLegend', [function () {
-    return {
-      restrict: 'E',
-      scope: {
-        // model access
-        facets: '=facets'
-      },
-      templateUrl: 'ml-search-map-legend-dir.html',
-      link: function($scope, $element, $attrs) {
-      }
-    };
-  }]);
-}());
+(function(module) {
+try {
+  module = angular.module('ml.google-maps.tpls');
+} catch (e) {
+  module = angular.module('ml.google-maps.tpls', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('/ml-google-maps-ng/ml-google-search-map.html',
+    '<section class="map"><div ui-map="map" ui-options="options" ui-event="{ \'map-bounds_changed\': \'boundsChanged()\', \'map-center_changed\': \'centerChanged()\', \'map-click\': \'click()\', \'map-dblclick\': \'dblclick()\', \'map-drag\': \'drag()\', \'map-dragend\': \'dragend()\', \'map-dragstart\': \'dragstart()\', \'map-heading_changed\': \'headingChanged()\', \'map-idle\': \'idle()\', \'map-maptypeid_changed\': \'maptypeidChanged()\', \'map-mousemove\': \'mousemove()\', \'map-mouseout\': \'mouseout()\', \'map-mouseover\': \'mouseover()\', \'map-projection_changed\': \'projectionChanged()\', \'map-resize\': \'resize()\', \'map-rightclick\': \'rightclick()\', \'map-tilesloaded\': \'tilesloaded()\', \'map-tilt_changed\': \'tiltChanged()\', \'map-zoom_changed\': \'zoomChanged()\' }" class="map-canvas"></div><div ng-repeat="marker in markers" ui-map-marker="marker" ui-event="{\'map-click\': \'showResult(marker.title)\'}"></div><div ui-map-info-window="myInfoWindow">Lat: <input ng-model="currentMarkerLat">, Lng: <input ng-model="currentMarkerLng"> <button ng-click="setMarkerPosition(currentMarker, currentMarkerLat, currentMarkerLng)">Update</button></div></section>');
+}]);
+})();

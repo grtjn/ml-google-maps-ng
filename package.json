@@ -15,7 +15,11 @@
     "karma-coverage": "^0.2.6",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
-    "phantomjs": "^1.9.7-4"
+    "phantomjs": "^1.9.7-4",
+    "gulp-print": "^1.1.0",
+    "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-sourcemaps": "^1.5.2"
   },
   "engines": {
     "node": ">=0.8.0"
