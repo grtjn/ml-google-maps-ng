@@ -1,14 +1,35 @@
 <h1 class="page-header" itemprop="name">Google Maps for MarkLogic</h1>
 
 <div class="home row">
-  <div class="alert alert-info" role="alert">
-    <strong>Note:</strong>
-    These examples are running with static data. Zooming in could respond with recalculation of heatmap to get finer detail.
+  <h4>Key features</h4>
+  <ul>
+    <li>Show multiple geospatial facets on one map</li>
+    <li>Fast display of cluster markers</li>
+    <li>Distinctly colored markers per facet</li>
+    <li>Automatic legend display</li>
+    <li>Mouse interaction:
+      <ul>
+        <li>Double-click to zoom in and limit geo search</li>
+        <li>Drag to change center and limit geo search</li>
+        <li>Draw rectangles to limit geo search</li>
+        <li>Right-click to reset zoom and center</li>
+        <li>Click on single point markers to show details</li>
+      </ul>
+    </li>
+  </ul>
+  <h4>Example</h4>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="alert alert-info" role="alert">
+        <strong>Note:</strong>
+        This example is running with static data. Is is possible to make zooming in respond with recalculation of heatmap to get finer detail, but that is not shown here.
+      </div>
+      <ml-google-search-map map="model.searchMap.map" options="model.searchMap.options"
+                  facets="model.search.facets" markers="model.searchMap.markers" bounds-changed="boundsChanged(bounds)"
+                  show-result="showResult(uri)" show-context-menu="resetMap()" selections="model.searchMap.selections">
+      </ml-google-search-map>
+      <ml-google-search-map-legend facets="model.search.facets"></ml-google-search-map-legend>
+    </div>
   </div>
-  <ml-google-search-map map="model.searchMap.map" options="model.searchMap.options"
-              facets="model.search.facets" markers="model.searchMap.markers" bounds-changed="boundsChanged(bounds)"
-              show-result="showResult(uri)" show-context-menu="resetMap()" selections="model.searchMap.selections">
-  </ml-google-search-map>
-  <ml-google-search-map-legend facets="model.search.facets"></ml-google-search-map-legend>
   <div style="display:none">{{model.search}}</div>
 </div>
