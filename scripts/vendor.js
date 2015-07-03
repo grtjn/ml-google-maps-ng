@@ -77172,7 +77172,7 @@ if (typeof jQuery === 'undefined') {
           // No delayed execution here, this is safe..
           /* jshint loopfunc: true */
           angular.forEach(facet.boxes, function(box, index) {
-            $scope.markers.push(markerFactory.createMapMarker($scope.map, box, index, i));
+            $scope.markers.push(markerFactory.createMarker($scope.map, box, index, i));
           });
           /* jshint loopfunc: false */
         }
