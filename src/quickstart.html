@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <p>
             To start using Google Maps for MarkLogic, follow these simple steps to get started.
-            Once you're up and running, visit the <a ui-sref="api">API documentation</a> to learn how to get the most out of it.
+            <!--Once you're up and running, visit the <a ui-sref="api">API documentation</a> to learn how to get the most out of it.-->
         </p>
 
         <ol class="steps">
@@ -14,27 +14,40 @@
                     (<a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.min.js">minified version</a>) and put it with your other scripts.
                     Alternatively, you can use Bower to install it automatically:
                 </p>
-                <div hljs language="bash">bower install [-save] ml-google-maps-ng</div>
-                <p>If not using Bower, you'll also need to fetch <a href="http://lodash.com/" rel="external">lodash.js</a>, and <a href="http://github.com/angular-ui/angular-google-maps" rel="external">angular-google-maps.js</a> yourself.</p>
+                <div hljs language="bash">bower install [--save] ml-google-maps-ng</div>
+                <p>
+                    Or if you prefer bleeding edge:
+                </p>
+                <div hljs language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div>
+                <!-- current code still depends on angular-ui-map -->
+                <p>If not using Bower, you'll also need to fetch <a href="https://github.com/angular-ui/ui-utils/tree/v0.2.3" rel="external">ui-utils.js (v0.2.3)</a>, and <a href="https://github.com/angular-ui/ui-map/tree/v0.5.0" rel="external">ui-map.js (v0.5.0)</a> yourself.</p>
+                <!-- replace above with this once we switch to angular-google-maps -->
+                <!--p>If not using Bower, you'll also need to fetch <a href="http://lodash.com/" rel="external">lodash.js</a>, and <a href="http://github.com/angular-ui/angular-google-maps" rel="external">angular-google-maps.js</a> yourself.</p-->
             </li>
             <li>
-                <p>Load lodash.js, angular-google-maps.js, and ml-google-maps-ng.js into your HTML page:</p>
-                <div hljs language="html" source="'<script src=\'/path/to/lodash[.min].js\'></script>\n<script src=\'/path/to/angular-google-maps[.min].js\'></script>\n<script src=\'/path/to/ml-google-maps-ng[.min].js\'></script>'">
+                <!-- current code still depends on angular-ui-map -->
+                <p>Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page:</p>
+                <div hljs language="html" source="'<script src=\'/bower_components/angular-ui-utils/ui-utils[.min].js\'></script>\n<script src=\'/bower_components/angular-ui-map/ui-map[.min].js\'></script>\n<script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'></script>'">
                 </div>
+                <!-- replace above with this once we switch to angular-google-maps -->
+                <!--p>Load lodash.js, angular-google-maps.js, and ml-google-maps-ng.js into your HTML page:</p>
+                <div hljs language="html" source="'<script src=\'/bower_components/lodash/lodash[.min].js\'></script>\n<script src=\'/bower_components/angular-google-maps/dist/angular-google-maps[.min].js\'></script>\n<script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'></script>'">
+                </div-->
             </li>
             <li>
-                <p>Include the Google Maps API v3, via one of two ways:</p>
+                <p>Include the Google Maps API v3, via<!-- one of two ways-->:</p>
                 <ul>
-                    <li>
+                    <!-- not available with angular-ui-map -->
+                    <!--li>
                         <p><a href="#!/api#GoogleMapApi">Google Maps SDK Async Loader</a> <span class="badge badge-info">New in v2.0.0</span></p>
                         <p>This is the <span class="label label-success">RECOMMENDED</span> way, as it tries to guarantee that Google Maps is ready prior to running any Google dependencies.</p>
-                    </li>
+                    </li-->
                     <li>
                         <p>Directly load into your HTML page. Example:</p>
-                        <div hljs language="html" source="'<script src=\'//maps.googleapis.com/maps/api/js?sensor=false\'></script>'">
+                        <div hljs language="html" source="'<script src=\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\'></script>'">
                         </div>
                         <p class="muted">
-                            Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js!
+                            Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js! The easiest way to do this is to put loading the google maps api in the HTML head, and all angular code in the HTML body.
                         </p>
                     </li>
                 </ul>
@@ -51,7 +64,7 @@
                     There is an <a href="https://github.com/googollee/eviltransform" target="_blank">open-source project</a> that can provide approximate translation between GCJ-02 and WSG-84.
                 </p>
                 <p>
-                    Google also submits to this regulation. They serve this modified system at maps.google.cn. <br>
+                    Google also submits to this regulation. They serve this modified system at maps.google.cn. <!--br>
                     Specify a <code>china</code> flag when you load the Google Maps API using the GoogleMapsApi Loader like so:<br>
                 <div hljs language="js">
 angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
@@ -60,9 +73,9 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
             china: true
         });
     }]
-);
+);-->
                 </div>
-                    Alternatively if you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with
+                    <!--Alternatively i-->If you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with
                         <code>http://maps.google.cn/maps/api/js</code>.
                 </p>
             </li>
@@ -73,20 +86,82 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
             </li>
             <li>
                 <p>Add a <code>map</code> object to your scope like so:</p>
-                <div hljs language="js">$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };</div>
-                <p class="muted">
+                <div hljs language="js">
+var initMapOptions = {
+  center: new $window.google.maps.LatLng(52.3881895, 4.8447237);,
+  zoom: 10,
+  mapTypeId: $window.google.maps.MapTypeId.ROADMAP
+};
+
+$scope.myMap: {
+  map: null,
+  options: angular.copy(initMapOptions),
+  markers: [],
+  selections: []
+};
+
+$scope.myFacets = {
+  facets: {
+    locations: {
+      count: 4262,
+      boxes: [{
+        count: 625,
+        s: 52.28889,
+        w: 4.856865,
+        n: 52.33222,
+        e: 5.019565
+      }, {
+        count: 1301,
+        s: 52.33256,
+        w: 4.763993,
+        n: 52.40219,
+        e: 4.844532
+      }, {
+        count: 2336,
+        s: 52.33251,
+        w: 4.844792,
+        n: 52.42354,
+        e: 5.025896
+      }]
+    }
+  }
+};
+
+$scope.boundsChanged: function() {
+  // place your geospatial search code here, and make that update $scope.myFacets
+}
+
+$scope.resetMap: function() {
+  $scope.myMap.options = angular.copy(initMapOptions);
+  angular.forEach(model.searchMap.selections, function(overlay, index) {
+    overlay.setMap(null);
+  });
+  model.searchMap.selections.length = 0;
+}
+
+showResult: function(uri) {
+  $window.alert('You clicked ' + uri);
+}
+</div>
+                <!--p class="muted">
                     Note: this is the very minimum set of properties required for the map to work.
                     See the <a ui-sref="api">API documentation</a> for the full list of supported properties.
-                </p>
+                </p-->
             </li>
             <li>
-                <p>Add a <code>&lt;ui-gmap-google-map&gt;</code> element in your template like so:</p>
-                <div hljs language="html" source="'<ui-gmap-google-map center=\'map.center\' zoom=\'map.zoom\'></ui-gmap-google-map>'">
+                <p>Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:</p>
+                <div hljs language="html">
+  <ml-google-search-map map="myMap.map" options="myMap.options"
+              facets="myFacets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)"
+              show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections">
+  </ml-google-search-map>
+  <ml-google-search-map-legend facets="myFacets"></ml-google-search-map-legend>
                 </div>
             </li>
             <li>
-                <p>Specify an height via CSS for the map container:</p>
-                <div hljs language="css">.angular-google-map-container { height: 400px; }</div>
+                <p>Specify a height via CSS for the map container:</p>
+                <div hljs language="css">.map-canvas { height: 400px; }</div>
+                <!--div hljs language="css">.angular-google-map-container { height: 400px; }</div-->
             </li>
         </ol>
     </div>
