@@ -77152,7 +77152,7 @@ if (typeof jQuery === 'undefined') {
       }
     };
   }])
-  .controller('MLSearchMapController', ['MLGoogleMapMarkerFactory', '$scope', '$timeout', function(markerFactory, $scope, $timeout) {
+  .controller('MLGoogleSearchMapController', ['MLGoogleMapMarkerFactory', '$scope', '$timeout', function(markerFactory, $scope, $timeout) {
     
     // keep a copy of original options
     var initOptions = {};
