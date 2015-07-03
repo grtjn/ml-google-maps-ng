@@ -6,8 +6,9 @@
   .filter('hasBoxes', function() {
     return function(input,facet) {
       var out = [];
-      angular.forEach(input, function(facet) {
+      angular.forEach(input, function(facet, name) {
         if (facet && facet.boxes) {
+          facet.name = name;
           out.push(facet);
         }
       });
