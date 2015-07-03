@@ -398,7 +398,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('/ml-google-maps-ng/ml-google-search-map-legend.html',
-    '<div class="map-legend"><span ng-repeat="(index, facet) in facets | object2Array | hasBoxes"><span ng-class="{0: \'map-cluster-icon icon1\', 1: \'map-cluster-icon icon2\', 2: \'map-cluster-icon icon3\', 3: \'map-cluster-icon icon4\', 4: \'map-cluster-icon icon5\' }[index]"></span> <label>{{facet.label ? facet.label : facet.__key}}</label></span></div>');
+    '<div class="map-legend"><span ng-repeat="(index, facet) in facets | hasBoxes"><span ng-class="{0: \'map-cluster-icon icon1\', 1: \'map-cluster-icon icon2\', 2: \'map-cluster-icon icon3\', 3: \'map-cluster-icon icon4\', 4: \'map-cluster-icon icon5\' }[index]"></span> <label>{{facet.label ? facet.label : facet.__key}}</label></span></div>');
 }]);
 })();
 
