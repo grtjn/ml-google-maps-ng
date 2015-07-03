@@ -105,7 +105,7 @@
             position: bounds.getCenter(),
             map: map,
             title: box.uri,
-            icon: '/images/p'+icon+'.png'
+            icon: 'images/p'+icon+'.png'
           });
         } else {
           return new GoogleMapClusterMarker(bounds, map, box.count, icon);
