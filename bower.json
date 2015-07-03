@@ -36,8 +36,10 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    ".tmp",
+    "build",
     "test",
-    "tests",
+    "coverage",
     "gulpfile.js",
     "karma.conf.js",
     "package.json"
