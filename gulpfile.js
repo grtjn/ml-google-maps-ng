@@ -15,13 +15,16 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     sourcemaps = require('gulp-sourcemaps'),
     rename = require('gulp-rename'),
-    replace = require('gulp-replace');
+    replace = require('gulp-replace'),
+    flatten = require('gulp-flatten');
 
 gulp.task('clean', function () {
   return gulp.src([
       'index*.html',
       'scripts/*',
-      'styles/*'
+      'styles/*',
+      'images/*',
+      'fonts/*'
     ], {read: false})
     .pipe(info(function(filepath) {
       return 'deleting: ' + filepath;
@@ -108,4 +111,28 @@ gulp.task('minify', ['copy-index'], function () {
   ;
 });
 
-gulp.task('default', ['minify']);
+gulp.task('images', ['minify'], function () {
+  return gulp.src([
+      'bower_components/**/images/**/*.*'
+    ])
+    .pipe(flatten())
+    .pipe(gulp.dest('./images/'))
+    .pipe(info(function(filepath) {
+      return 'writing: ' + filepath;
+    }))
+  ;
+});
+
+gulp.task('fonts', ['images'], function () {
+  return gulp.src([
+      'bower_components/**/fonts/**/*.*'
+    ])
+    .pipe(flatten())
+    .pipe(gulp.dest('./fonts/'))
+    .pipe(info(function(filepath) {
+      return 'writing: ' + filepath;
+    }))
+  ;
+});
+
+gulp.task('default', ['fonts']);

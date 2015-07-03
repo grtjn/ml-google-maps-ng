@@ -14,7 +14,8 @@
     "font-awesome": "~4.3.0",
     "highlightjs": "~8.5.0",
     "jquery": "~2.1.4",
-    "lodash": "~3.9.3"
+    "lodash": "~3.9.3",
+    "ml-google-maps-ng": "git@github.com:grtjn/ml-google-maps-ng.git"
   },
   "devDependencies": {},
   "overrides": {
