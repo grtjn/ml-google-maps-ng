@@ -16,7 +16,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
-    flatten = require('gulp-flatten');
+    flatten = require('gulp-flatten'),
+    webserver = require('gulp-webserver');
 
 gulp.task('clean', function () {
   return gulp.src([
@@ -133,6 +134,23 @@ gulp.task('fonts', ['images'], function () {
       return 'writing: ' + filepath;
     }))
   ;
+});
+
+gulp.task('watch', function() {
+  gulp.watch([
+    'bower_components/**/*.*',
+    'src/**/*.*'
+  ], ['default']);
+});
+
+gulp.task('test', ['default', 'watch'], function() {
+  gulp.src('./')
+    .pipe(webserver({
+      path: '/ml-google-maps-ng/',
+      livereload: true,
+      directoryListing: false,
+      open: '/ml-google-maps-ng/index-dev.html'
+    }));
 });
 
 gulp.task('default', ['fonts']);

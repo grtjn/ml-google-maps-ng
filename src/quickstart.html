@@ -27,12 +27,15 @@
             <li>
                 <!-- current code still depends on angular-ui-map -->
                 <p>Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page:</p>
-                <div hljs language="html" source="'<script src=\'/bower_components/angular-ui-utils/ui-utils[.min].js\'></script>\n<script src=\'/bower_components/angular-ui-map/ui-map[.min].js\'></script>\n<script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'></script>'">
-                </div>
+                <pre hljs language="html">
+<script src='/bower_components/angular-ui-utils/ui-utils[.min].js'></script>
+<script src='/bower_components/angular-ui-map/ui-map[.min].js'></script>
+<script src='/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js'></script></pre>
                 <!-- replace above with this once we switch to angular-google-maps -->
                 <!--p>Load lodash.js, angular-google-maps.js, and ml-google-maps-ng.js into your HTML page:</p>
                 <div hljs language="html" source="'<script src=\'/bower_components/lodash/lodash[.min].js\'></script>\n<script src=\'/bower_components/angular-google-maps/dist/angular-google-maps[.min].js\'></script>\n<script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'></script>'">
                 </div-->
+                <p>Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a> together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.</p>
             </li>
             <li>
                 <p>Include the Google Maps API v3, via<!-- one of two ways-->:</p>
@@ -73,8 +76,8 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
             china: true
         });
     }]
-);-->
-                </div>
+);
+                </div-->
                     <!--Alternatively i-->If you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with
                         <code>http://maps.google.cn/maps/api/js</code>.
                 </p>
@@ -85,8 +88,8 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
                 <div hljs language="js">angular.module('myApplicationModule', ['ml-google-maps-ng']);</div>
             </li>
             <li>
-                <p>Add a <code>map</code> object to your scope like so:</p>
-                <div hljs language="js">
+                <p>Add objects and call-back functions to your scope like so:</p>
+                <pre hljs language="js">
 var initMapOptions = {
   center: new $window.google.maps.LatLng(52.3881895, 4.8447237);,
   zoom: 10,
@@ -142,7 +145,7 @@ $scope.resetMap: function() {
 showResult: function(uri) {
   $window.alert('You clicked ' + uri);
 }
-</div>
+</pre>
                 <!--p class="muted">
                     Note: this is the very minimum set of properties required for the map to work.
                     See the <a ui-sref="api">API documentation</a> for the full list of supported properties.
@@ -150,13 +153,13 @@ showResult: function(uri) {
             </li>
             <li>
                 <p>Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:</p>
-                <div hljs language="html">
-  <ml-google-search-map map="myMap.map" options="myMap.options"
-              facets="myFacets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)"
-              show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections">
-  </ml-google-search-map>
-  <ml-google-search-map-legend facets="myFacets"></ml-google-search-map-legend>
-                </div>
+                <pre hljs language="html">
+<ml-google-search-map map="myMap.map" options="myMap.options"
+            facets="myFacets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)"
+            show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections">
+</ml-google-search-map>
+
+<ml-google-search-map-legend facets="myFacets"></ml-google-search-map-legend></pre>
             </li>
             <li>
                 <p>Specify a height via CSS for the map container:</p>

@@ -18,6 +18,69 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('/quickstart.html',
-    '<h1 class="page-header">Quickstart</h1><div class="row"><div class="col-md-12"><p>To start using Google Maps for MarkLogic, follow these simple steps to get started.</p><ol class="steps"><li><p>Download <a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.js">ml-google-maps-ng.js</a> (<a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.min.js">minified version</a>) and put it with your other scripts. Alternatively, you can use Bower to install it automatically:</p><div hljs="" language="bash">bower install [--save] ml-google-maps-ng</div><p>Or if you prefer bleeding edge:</p><div hljs="" language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div><p>If not using Bower, you\'ll also need to fetch <a href="https://github.com/angular-ui/ui-utils/tree/v0.2.3" rel="external">ui-utils.js (v0.2.3)</a>, and <a href="https://github.com/angular-ui/ui-map/tree/v0.5.0" rel="external">ui-map.js (v0.5.0)</a> yourself.</p></li><li><p>Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page:</p><div hljs="" language="html" source="\'<script src=\\\'/bower_components/angular-ui-utils/ui-utils[.min].js\\\'></script>\\n<script src=\\\'/bower_components/angular-ui-map/ui-map[.min].js\\\'></script>\\n<script src=\\\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\\\'></script>\'"></div></li><li><p>Include the Google Maps API v3, via:</p><ul><li><p>Directly load into your HTML page. Example:</p><div hljs="" language="html" source="\'<script src=\\\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\\\'></script>\'"></div><p class="muted">Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js! The easiest way to do this is to put loading the google maps api in the HTML head, and all angular code in the HTML body.</p></li></ul><strong>Serving Google Maps in China</strong><p>It is a state demand that all online map providers must use an obscured coordinate system called GCJ-02 (aka Coordinates on Mars). GCJ-02 is WSG-84 based, but added offsets to both latitude and longitude.</p><p>If you display a marker from GCJ-02 coordinates on a GCJ-02 map, the place will be marked correctly.<br>However the offsets can result in a less-than-100 up to 700 meter error from the actual location if you place a GCJ-02 marker on a WSG-84 map and vice versa.</p><p>There is an <a href="https://github.com/googollee/eviltransform" target="_blank">open-source project</a> that can provide approximate translation between GCJ-02 and WSG-84.</p><p>Google also submits to this regulation. They serve this modified system at maps.google.cn.</p></li></ol></div>If you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with <code>http://maps.google.cn/maps/api/js</code>.<p></p><li><p>Make your application module depend on the <code>ml-google-maps-ng</code> module:</p><div hljs="" language="js">angular.module(\'myApplicationModule\', [\'ml-google-maps-ng\']);</div></li><li><p>Add a <code>map</code> object to your scope like so:</p><div hljs="" language="js">var initMapOptions = { center: new $window.google.maps.LatLng(52.3881895, 4.8447237);, zoom: 10, mapTypeId: $window.google.maps.MapTypeId.ROADMAP }; $scope.myMap: { map: null, options: angular.copy(initMapOptions), markers: [], selections: [] }; $scope.myFacets = { facets: { locations: { count: 4262, boxes: [{ count: 625, s: 52.28889, w: 4.856865, n: 52.33222, e: 5.019565 }, { count: 1301, s: 52.33256, w: 4.763993, n: 52.40219, e: 4.844532 }, { count: 2336, s: 52.33251, w: 4.844792, n: 52.42354, e: 5.025896 }] } } }; $scope.boundsChanged: function() { // place your geospatial search code here, and make that update $scope.myFacets } $scope.resetMap: function() { $scope.myMap.options = angular.copy(initMapOptions); angular.forEach(model.searchMap.selections, function(overlay, index) { overlay.setMap(null); }); model.searchMap.selections.length = 0; } showResult: function(uri) { $window.alert(\'You clicked \' + uri); }</div></li><li><p>Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:</p><div hljs="" language="html"><ml-google-search-map map="myMap.map" options="myMap.options" facets="myFacets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)" show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections"></ml-google-search-map><ml-google-search-map-legend facets="myFacets"></ml-google-search-map-legend></div></li><li><p>Specify a height via CSS for the map container:</p><div hljs="" language="css">.map-canvas { height: 400px; }</div></li></div>');
+    '<h1 class="page-header">Quickstart</h1><div class="row"><div class="col-md-12"><p>To start using Google Maps for MarkLogic, follow these simple steps to get started.</p><ol class="steps"><li><p>Download <a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.js">ml-google-maps-ng.js</a> (<a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.min.js">minified version</a>) and put it with your other scripts. Alternatively, you can use Bower to install it automatically:</p><div hljs="" language="bash">bower install [--save] ml-google-maps-ng</div><p>Or if you prefer bleeding edge:</p><div hljs="" language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div><p>If not using Bower, you\'ll also need to fetch <a href="https://github.com/angular-ui/ui-utils/tree/v0.2.3" rel="external">ui-utils.js (v0.2.3)</a>, and <a href="https://github.com/angular-ui/ui-map/tree/v0.5.0" rel="external">ui-map.js (v0.5.0)</a> yourself.</p></li><li><p>Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page:</p><pre hljs="" language="html">\n' +
+    '<script src="/bower_components/angular-ui-utils/ui-utils[.min].js"></script>\n' +
+    '<script src="/bower_components/angular-ui-map/ui-map[.min].js"></script>\n' +
+    '<script src="/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js"></script></pre><p>Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a> together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.</p></li><li><p>Include the Google Maps API v3, via:</p><ul><li><p>Directly load into your HTML page. Example:</p><div hljs="" language="html" source="\'<script src=\\\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\\\'></script>\'"></div><p class="muted">Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js! The easiest way to do this is to put loading the google maps api in the HTML head, and all angular code in the HTML body.</p></li></ul><strong>Serving Google Maps in China</strong><p>It is a state demand that all online map providers must use an obscured coordinate system called GCJ-02 (aka Coordinates on Mars). GCJ-02 is WSG-84 based, but added offsets to both latitude and longitude.</p><p>If you display a marker from GCJ-02 coordinates on a GCJ-02 map, the place will be marked correctly.<br>However the offsets can result in a less-than-100 up to 700 meter error from the actual location if you place a GCJ-02 marker on a WSG-84 map and vice versa.</p><p>There is an <a href="https://github.com/googollee/eviltransform" target="_blank">open-source project</a> that can provide approximate translation between GCJ-02 and WSG-84.</p><p>Google also submits to this regulation. They serve this modified system at maps.google.cn.If you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with <code>http://maps.google.cn/maps/api/js</code>.</p></li><li><p>Make your application module depend on the <code>ml-google-maps-ng</code> module:</p><div hljs="" language="js">angular.module(\'myApplicationModule\', [\'ml-google-maps-ng\']);</div></li><li><p>Add objects and call-back functions to your scope like so:</p><pre hljs="" language="js">\n' +
+    'var initMapOptions = {\n' +
+    '  center: new $window.google.maps.LatLng(52.3881895, 4.8447237);,\n' +
+    '  zoom: 10,\n' +
+    '  mapTypeId: $window.google.maps.MapTypeId.ROADMAP\n' +
+    '};\n' +
+    '\n' +
+    '$scope.myMap: {\n' +
+    '  map: null,\n' +
+    '  options: angular.copy(initMapOptions),\n' +
+    '  markers: [],\n' +
+    '  selections: []\n' +
+    '};\n' +
+    '\n' +
+    '$scope.myFacets = {\n' +
+    '  facets: {\n' +
+    '    locations: {\n' +
+    '      count: 4262,\n' +
+    '      boxes: [{\n' +
+    '        count: 625,\n' +
+    '        s: 52.28889,\n' +
+    '        w: 4.856865,\n' +
+    '        n: 52.33222,\n' +
+    '        e: 5.019565\n' +
+    '      }, {\n' +
+    '        count: 1301,\n' +
+    '        s: 52.33256,\n' +
+    '        w: 4.763993,\n' +
+    '        n: 52.40219,\n' +
+    '        e: 4.844532\n' +
+    '      }, {\n' +
+    '        count: 2336,\n' +
+    '        s: 52.33251,\n' +
+    '        w: 4.844792,\n' +
+    '        n: 52.42354,\n' +
+    '        e: 5.025896\n' +
+    '      }]\n' +
+    '    }\n' +
+    '  }\n' +
+    '};\n' +
+    '\n' +
+    '$scope.boundsChanged: function() {\n' +
+    '  // place your geospatial search code here, and make that update $scope.myFacets\n' +
+    '}\n' +
+    '\n' +
+    '$scope.resetMap: function() {\n' +
+    '  $scope.myMap.options = angular.copy(initMapOptions);\n' +
+    '  angular.forEach(model.searchMap.selections, function(overlay, index) {\n' +
+    '    overlay.setMap(null);\n' +
+    '  });\n' +
+    '  model.searchMap.selections.length = 0;\n' +
+    '}\n' +
+    '\n' +
+    'showResult: function(uri) {\n' +
+    '  $window.alert(\'You clicked \' + uri);\n' +
+    '}\n' +
+    '</pre></li><li><p>Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:</p><pre hljs="" language="html">\n' +
+    '<ml-google-search-map map="myMap.map" options="myMap.options" facets="myFacets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)" show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections">\n' +
+    '</ml-google-search-map>\n' +
+    '\n' +
+    '<ml-google-search-map-legend facets="myFacets"></ml-google-search-map-legend></pre></li><li><p>Specify a height via CSS for the map container:</p><div hljs="" language="css">.map-canvas { height: 400px; }</div></li></ol></div></div>');
 }]);
 })();
