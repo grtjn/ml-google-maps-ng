@@ -121,7 +121,7 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
                 <p>
                   Make your application module depend on the <code>ml-google-maps-ng</code> module:
                 </p>
-                <div hljs language="js">angular.module('myApplicationModule', ['ml-google-maps-ng']);</div>
+                <div hljs language="js">angular.module('myApplicationModule', ['ml.google-maps']);</div>
             </li>
             
             <!-- 6 -->
@@ -131,7 +131,7 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
                 </p>
                 <pre hljs language="js">
 var initMapOptions = {
-  center: new $window.google.maps.LatLng(52.3881895, 4.8447237);,
+  center: new $window.google.maps.LatLng(52.3881895, 4.8447237),
   zoom: 10,
   mapTypeId: $window.google.maps.MapTypeId.ROADMAP
 };
@@ -170,21 +170,21 @@ $scope.myFacets = {
   }
 };
 
-$scope.boundsChanged: function() {
+$scope.boundsChanged = function() {
   // place your geospatial search code here, and make that update $scope.myFacets
-}
+};
 
-$scope.resetMap: function() {
+$scope.resetMap = function() {
   $scope.myMap.options = angular.extend({}, initMapOptions);
   angular.forEach(model.searchMap.selections, function(overlay, index) {
     overlay.setMap(null);
   });
   model.searchMap.selections.length = 0;
-}
+};
 
-showResult: function(uri) {
+$scope.showResult = function(uri) {
   $window.alert('You clicked ' + uri);
-}
+};
 </pre>
                 <!--p class="muted">
                     Note: this is the very minimum set of properties required for the map to work.

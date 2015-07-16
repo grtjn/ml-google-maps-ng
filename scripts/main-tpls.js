@@ -22,9 +22,9 @@ module.run(['$templateCache', function($templateCache) {
     '<script src="/bower_components/angular-ui-utils/ui-utils[.min].js"></script>\n' +
     '<script src="/bower_components/angular-ui-map/ui-map[.min].js"></script>\n' +
     '<script src="/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js"></script></pre><p class="text-muted">Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a>, optionally together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.</p></li><li><p>Include the Google Maps API v3, via:</p><ul><li><p>Directly load into your HTML page. Example:</p><div hljs="" language="html" source="\'<script src=\\\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\\\'></script>\'"></div><p class="text-muted">Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js! The easiest way to do this is to put loading the google maps api in the HTML head, and all angular code in the HTML body.</p></li></ul><strong>Serving Google Maps in China</strong><p>It is a state demand that all online map providers must use an obscured coordinate system called GCJ-02 (aka Coordinates on Mars). GCJ-02 is WSG-84 based, but added offsets to both latitude and longitude.</p><p>If you display a marker from GCJ-02 coordinates on a GCJ-02 map, the place will be marked correctly.<br>However the offsets can result in a less-than-100 up to 700 meter error from the actual location if you place a GCJ-02 marker on a WSG-84 map and vice versa.</p><p>There is an <a href="https://github.com/googollee/eviltransform" target="_blank">open-source project</a> that can provide approximate translation between GCJ-02 and WSG-84.</p><p>Google also submits to this regulation. They serve this modified system at maps.google.cn.If you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with <code>http://maps.google.cn/maps/api/js</code>.</p></li><li><p>Load ml-google-maps-ng.css into your HTML page (typically in the end of the <em>HEAD</em> of your HTML):</p><pre hljs="" language="html">\n' +
-    '<link rel="stylesheet" href="/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng.css"></pre><p class="text-muted">Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a>, optionally together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.</p><p class="text-muted">Note: If you go down the route of using gulp-useref, you will likely need to copy images to a folder that is publicly accessible as /images/, otherwise images for the map markers cannot be found by the directive.</p></li><li><p>Make your application module depend on the <code>ml-google-maps-ng</code> module:</p><div hljs="" language="js">angular.module(\'myApplicationModule\', [\'ml-google-maps-ng\']);</div></li><li><p>Add objects and call-back functions to your scope like so:</p><pre hljs="" language="js">\n' +
+    '<link rel="stylesheet" href="/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng.css"></pre><p class="text-muted">Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a>, optionally together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.</p><p class="text-muted">Note: If you go down the route of using gulp-useref, you will likely need to copy images to a folder that is publicly accessible as /images/, otherwise images for the map markers cannot be found by the directive.</p></li><li><p>Make your application module depend on the <code>ml-google-maps-ng</code> module:</p><div hljs="" language="js">angular.module(\'myApplicationModule\', [\'ml.google-maps\']);</div></li><li><p>Add objects and call-back functions to your scope like so:</p><pre hljs="" language="js">\n' +
     'var initMapOptions = {\n' +
-    '  center: new $window.google.maps.LatLng(52.3881895, 4.8447237);,\n' +
+    '  center: new $window.google.maps.LatLng(52.3881895, 4.8447237),\n' +
     '  zoom: 10,\n' +
     '  mapTypeId: $window.google.maps.MapTypeId.ROADMAP\n' +
     '};\n' +
@@ -63,21 +63,21 @@ module.run(['$templateCache', function($templateCache) {
     '  }\n' +
     '};\n' +
     '\n' +
-    '$scope.boundsChanged: function() {\n' +
+    '$scope.boundsChanged = function() {\n' +
     '  // place your geospatial search code here, and make that update $scope.myFacets\n' +
-    '}\n' +
+    '};\n' +
     '\n' +
-    '$scope.resetMap: function() {\n' +
+    '$scope.resetMap = function() {\n' +
     '  $scope.myMap.options = angular.extend({}, initMapOptions);\n' +
     '  angular.forEach(model.searchMap.selections, function(overlay, index) {\n' +
     '    overlay.setMap(null);\n' +
     '  });\n' +
     '  model.searchMap.selections.length = 0;\n' +
-    '}\n' +
+    '};\n' +
     '\n' +
-    'showResult: function(uri) {\n' +
+    '$scope.showResult = function(uri) {\n' +
     '  $window.alert(\'You clicked \' + uri);\n' +
-    '}\n' +
+    '};\n' +
     '</pre></li><li><p>Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:</p><pre hljs="" language="html">\n' +
     '<ml-google-search-map map="myMap.map" options="myMap.options" facets="myFacets.facets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)" show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections">\n' +
     '</ml-google-search-map>\n' +
