@@ -29,7 +29,7 @@ module.run(['$templateCache', function($templateCache) {
     '  mapTypeId: $window.google.maps.MapTypeId.ROADMAP\n' +
     '};\n' +
     '\n' +
-    '$scope.myMap: {\n' +
+    '$scope.myMap = {\n' +
     '  map: null,\n' +
     '  options: angular.extend({}, initMapOptions),\n' +
     '  markers: [],\n' +
