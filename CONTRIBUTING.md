@@ -46,13 +46,13 @@ chances of your issue being dealt with quickly:
 
 #### Fork ml-google-maps-ng
 
-Fork the project [on GitHub](https://github.com/marklogic/ml-google-maps-ng/fork) and clone
+Fork the project [on GitHub](https://github.com/grtjn/ml-google-maps-ng/fork) and clone
 your copy.
 
 ```sh
 $ git clone git@github.com:username/ml-google-maps-ng.git
 $ cd ml-google-maps-ng
-$ git remote add upstream git://github.com/marklogic/ml-google-maps-ng.git
+$ git remote add upstream git://github.com/grtjn/ml-google-maps-ng.git
 ```
 
 All bug fixes and new features go into the master branch.
@@ -169,7 +169,7 @@ from the main (upstream) repository:
     git pull --ff upstream master
     ```
 
-[wiki]: https://github.com/marklogic/ml-google-maps-ng/wiki
+[wiki]: https://github.com/grtjn/ml-google-maps-ng/wiki
 [mlstack]: http://stackoverflow.com/questions/tagged/marklogic
-[issue tracker]: https://github.com/marklogic/ml-google-maps-ng/issues
+[issue tracker]: https://github.com/grtjn/ml-google-maps-ng/issues
 [.editorconfig]: http://editorconfig.org/

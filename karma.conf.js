@@ -19,6 +19,7 @@ module.exports = function(config) {
       'http://maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false&language=en',
       
       // App under test
+      'src/ml-google-maps.js',
       'src/**/*.js',
 
       // Mocks
