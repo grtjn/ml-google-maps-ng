@@ -15,11 +15,11 @@
                     (<a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.min.js">minified version</a>) and put it with your other scripts.
                     Alternatively, you can use Bower to install it automatically:
                 </p>
-                <div hljs language="bash">bower install [--save] ml-google-maps-ng</div>
+                <div hljs no-escape language="bash">bower install [--save] ml-google-maps-ng</div>
                 <p>
                     Or if you prefer bleeding edge:
                 </p>
-                <div hljs language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div>
+                <div hljs no-escape language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div>
                 <!-- current code still depends on angular-ui-map -->
                 <p>
                   If not using Bower, you'll also need to fetch <a href="https://github.com/angular-ui/ui-utils/tree/v0.2.3" rel="external">ui-utils.js (v0.2.3)</a>, and <a href="https://github.com/angular-ui/ui-map/tree/v0.5.0" rel="external">ui-map.js (v0.5.0)</a> yourself.
@@ -36,13 +36,13 @@
                 <p>
                   Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page (typically in the end of the <em>BODY</em> of your HTML):
                 </p>
-                <pre hljs language="html">
-<script src='/bower_components/angular-ui-utils/ui-utils[.min].js'></script>
-<script src='/bower_components/angular-ui-map/ui-map[.min].js'></script>
-<script src='/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js'></script></pre>
+                <pre hljs no-escape language="html">
+&lt;script src='/bower_components/angular-ui-utils/ui-utils[.min].js'>&lt;/script>
+&lt;script src='/bower_components/angular-ui-map/ui-map[.min].js'>&lt;/script>
+&lt;script src='/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js'>&lt;/script></pre>
                 <!-- replace above with this once we switch to angular-google-maps -->
                 <!--p>Load lodash.js, angular-google-maps.js, and ml-google-maps-ng.js into your HTML page:</p>
-                <div hljs language="html" source="'<script src=\'/bower_components/lodash/lodash[.min].js\'></script>\n<script src=\'/bower_components/angular-google-maps/dist/angular-google-maps[.min].js\'></script>\n<script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'></script>'">
+                <div hljs no-escape language="html" source="'<script src=\'/bower_components/lodash/lodash[.min].js\'></script>\n<script src=\'/bower_components/angular-google-maps/dist/angular-google-maps[.min].js\'></script>\n<script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'></script>'">
                 </div-->
                 <p class="text-muted">
                   Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a>, optionally together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.
@@ -64,7 +64,7 @@
                         <p>
                           Directly load into your HTML page. Example:
                         </p>
-                        <div hljs language="html" source="'<script src=\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\'></script>'">
+                        <div hljs no-escape language="html" source="'<script src=\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\'></script>'">
                         </div>
                         <p class="text-muted">
                             Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js! The easiest way to do this is to put loading the google maps api in the HTML head, and all angular code in the HTML body.
@@ -106,8 +106,8 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
                 <p>
                   Load ml-google-maps-ng.css into your HTML page (typically in the end of the <em>HEAD</em> of your HTML):
                 </p>
-                <pre hljs language="html">
-<link rel="stylesheet" href="/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng.css"></pre>
+                <pre hljs no-escape language="html">
+&lt;link rel="stylesheet" href="/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng.css"></pre>
                 <p class="text-muted">
                   Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a>, optionally together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.
                 </p>
@@ -121,70 +121,75 @@ angular.module('myApplicationModule', ['ml-google-maps-ng']).config(
                 <p>
                   Make your application module depend on the <code>ml-google-maps-ng</code> module:
                 </p>
-                <div hljs language="js">angular.module('myApplicationModule', ['ml.google-maps']);</div>
+                <div hljs no-escape language="js">angular.module('myApplicationModule', ['ml.google-maps']);</div>
             </li>
             
             <!-- 6 -->
             <li>
                 <p>
-                  Add objects and call-back functions to your scope like so:
+                  Expose objects and call-back functions in your Angular controller:
                 </p>
-                <pre hljs language="js">
-var initMapOptions = {
-  center: new $window.google.maps.LatLng(52.3881895, 4.8447237),
-  zoom: 10,
-  mapTypeId: $window.google.maps.MapTypeId.ROADMAP
-};
+                <pre hljs no-escape language="js">
+MyCtrl.$inject = ['$scope'];
+function MyCtrl($scope) {
+  var ctrl = this;
 
-$scope.myMap = {
-  map: null,
-  options: angular.extend({}, initMapOptions),
-  markers: [],
-  selections: []
-};
+  var initMapOptions = {
+    center: new $window.google.maps.LatLng(52.3881895, 4.8447237),
+    zoom: 10,
+    mapTypeId: $window.google.maps.MapTypeId.ROADMAP
+  };
 
-$scope.myFacets = {
-  facets: {
-    locations: {
-      count: 4262,
-      boxes: [{
-        count: 625,
-        s: 52.28889,
-        w: 4.856865,
-        n: 52.33222,
-        e: 5.019565
-      }, {
-        count: 1301,
-        s: 52.33256,
-        w: 4.763993,
-        n: 52.40219,
-        e: 4.844532
-      }, {
-        count: 2336,
-        s: 52.33251,
-        w: 4.844792,
-        n: 52.42354,
-        e: 5.025896
-      }]
+  ctrl.myMap = {
+    map: null,
+    options: angular.extend({}, initMapOptions),
+    markers: [],
+    selections: []
+  };
+
+  ctrl.myFacets = {
+    facets: {
+      locations: {
+        count: 4262,
+        boxes: [{
+          count: 625,
+          s: 52.28889,
+          w: 4.856865,
+          n: 52.33222,
+          e: 5.019565
+        }, {
+          count: 1301,
+          s: 52.33256,
+          w: 4.763993,
+          n: 52.40219,
+          e: 4.844532
+        }, {
+          count: 2336,
+          s: 52.33251,
+          w: 4.844792,
+          n: 52.42354,
+          e: 5.025896
+        }]
+      }
     }
-  }
-};
+  };
 
-$scope.boundsChanged = function() {
-  // place your geospatial search code here, and make that update $scope.myFacets
-};
+  ctrl.boundsChanged = function() {
+    // place your geospatial search code here, and make that update $scope.myFacets
+  };
 
-$scope.resetMap = function() {
-  $scope.myMap.options = angular.extend({}, initMapOptions);
-  angular.forEach(model.searchMap.selections, function(overlay, index) {
-    overlay.setMap(null);
-  });
-  model.searchMap.selections.length = 0;
-};
+  ctrl.resetMap = function() {
+    ctrl.myMap.options = angular.extend({}, initMapOptions);
+    angular.forEach(model.searchMap.selections, function(overlay, index) {
+      overlay.setMap(null);
+    });
+    model.searchMap.selections.length = 0;
+  };
 
-$scope.showResult = function(uri) {
-  $window.alert('You clicked ' + uri);
-};
+  ctrl.showResult = function(uri) {
+    $window.alert('You clicked ' + uri);
+  };
+}
 </pre>
                 <!--p class="muted">
                     Note: this is the very minimum set of properties required for the map to work.
@@ -197,13 +202,13 @@ $scope.showResult = function(uri) {
                 <p>
                   Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:
                 </p>
-                <pre hljs language="html">
-<ml-google-search-map map="myMap.map" options="myMap.options"
+                <pre hljs no-escape language="html">
+&lt;ml-google-search-map map="myMap.map" options="myMap.options"
             facets="myFacets.facets" markers="myMap.markers" bounds-changed="boundsChanged(bounds)"
             show-result="showResult(uri)" show-context-menu="resetMap()" selections="myMap.selections">
-</ml-google-search-map>
+&lt;/ml-google-search-map>
 
-<ml-google-search-map-legend facets="myFacets.facets"></ml-google-search-map-legend></pre>
+&lt;ml-google-search-map-legend facets="myFacets.facets">&lt;/ml-google-search-map-legend></pre>
             </li>
 
             <!-- 8 -->
@@ -211,8 +216,8 @@ $scope.showResult = function(uri) {
                 <p>
                   Optionally override the height via CSS for the map container:
                 </p>
-                <div hljs language="css">.map-canvas { height: 400px !important; }</div>
-                <!--div hljs language="css">.angular-google-map-container { height: 400px; }</div-->
+                <div hljs no-escape language="css">.map-canvas { height: 400px !important; }</div>
+                <!--div hljs no-escape language="css">.angular-google-map-container { height: 400px; }</div-->
             </li>
         </ol>
     </div>
