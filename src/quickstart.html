@@ -41,9 +41,9 @@
                 </p>
                 <pre hljs no-escape language="js">
 
-SearchCtrl.$inject = [..., '$state', 'MLQueryBuilder'];
+SearchCtrl.$inject = [..., '$window', '$state', 'MLQueryBuilder'];
 
-function SearchCtrl(..., $state, qb) {
+function SearchCtrl(..., $window, $state, qb) {
   ...
 
   var initMapOptions = {
@@ -81,7 +81,7 @@ function SearchCtrl(..., $state, qb) {
         qb.or(
           // This assumes a geo facet called `Locations`.
           // Repeat following line for each geo facet in the app.
-          qb.ext.geospatial('Locations', ctrl.bounds)
+          qb.ext.geospatialConstraint('Locations', ctrl.bounds)
         )
       );
 
@@ -140,12 +140,12 @@ function SearchCtrl(..., $state, qb) {
         <ol class="steps">
             <!-- 1 -->
             <li>
-              <p>Disable search options validation, edit <code>rest-api/config/properties.xml</code>, and change the validate-options setting to false. Run <code>./ml local deploy rest</code> to apply.</p>
+              <p>Disable search options validation, edit <code>rest-api/config/properties.xml</code>, and change the validate-options setting to false.</p>
             </li>
 
             <!-- 2 -->
             <li>
-              <p>Download <a href="geo.xqy">geo.xqy</a>, and copy into <code>src/constraint/</code></p>
+              <p>Download <a href="geo.xqy">geo.xqy</a> (ML 8 or higher!), and copy into <code>src/constraint/</code>.</p>
             </li>
 
             <!-- 3 -->
@@ -165,13 +165,18 @@ function SearchCtrl(..., $state, qb) {
 
           <!-- 4 -->
           <li>
+            <p>Run <code>./ml local deploy modules</code> to apply all changes</p>
+          </li>
+
+          <!-- 5 -->
+          <li>
             <p>Edit <code>ui/app/search/search.controller.js</code>, and replace:</p>
 <pre hljs no-escape language="js">
-  qb.ext.geospatial('Locations', ctrl.bounds)
+  qb.ext.geospatialConstraint('Locations', ctrl.bounds)
 </pre>
             <p>with:</p>
 <pre hljs no-escape language="js">
-  qb.ext.custom('Locations', qb.ext.geospatialValues(ctrl.bounds))
+  qb.ext.customConstraint('Locations', qb.ext.geospatialValues(ctrl.bounds))
 </pre>
           </li>
         </ol>
