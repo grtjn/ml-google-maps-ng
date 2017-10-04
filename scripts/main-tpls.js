@@ -18,7 +18,80 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('/quickstart.html',
-    '<h1 class="page-header">Quickstart</h1><div class="row"><div class="col-md-12"><p>To start using Google Maps for MarkLogic, follow these simple steps to get started.</p><ol class="steps"><li><p>Download <a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.js">ml-google-maps-ng.js</a> (<a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.min.js">minified version</a>) and put it with your other scripts. Alternatively, you can use Bower to install it automatically:</p><div hljs="" no-escape="" language="bash">bower install [--save] ml-google-maps-ng</div><p>Or if you prefer bleeding edge:</p><div hljs="" no-escape="" language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div><p>If not using Bower, you\'ll also need to fetch <a href="https://github.com/angular-ui/ui-utils/tree/v0.2.3" rel="external">ui-utils.js (v0.2.3)</a>, and <a href="https://github.com/angular-ui/ui-map/tree/v0.5.0" rel="external">ui-map.js (v0.5.0)</a> yourself.</p></li><li><p>Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page (typically in the end of the <em>BODY</em> of your HTML):</p><pre hljs="" no-escape="" language="html">\n' +
+    '<h1 class="page-header">Quickstart</h1><div class="row"><div class="col-md-12"><p>To start using Google Maps for MarkLogic, follow these simple steps to get started.</p><h3>For use with slush-marklogic-node</h3><p>The <a href="https://github.com/marklogic-community/slush-marklogic-node">slush-marklogic-node</a> has been optimized to make pulling in components like this as easy as possible</p><ol class="steps"><li><div hljs="" no-escape="" language="bash">bower install --save ml-google-maps-ng</div></li><li><p>Include this at the end of the <code>&lt;head&gt;</code> of <code>ui/index.html</code>:</p><div hljs="" no-escape="" language="html" source="\'<script src=\\\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\\\'></script>\'"></div></li><li><p>Include <code>\'ml.google-maps\'</code> as a module dependency in for instance <code>ui/app/search/search.module.js</code>:</p><div hljs="" no-escape="" language="js">angular.module(\'app.search\', [..., \'ml.google-maps\']);</div></li><li><p>Edit <code>ui/app/search/search.controller.js</code>, and add:</p><pre hljs="" no-escape="" language="js">\n' +
+    '\n' +
+    'SearchCtrl.$inject = [..., \'$state\', \'MLQueryBuilder\'];\n' +
+    '\n' +
+    'function SearchCtrl(..., $state, qb) {\n' +
+    '  ...\n' +
+    '\n' +
+    '  var initMapOptions = {\n' +
+    '    center: new $window.google.maps.LatLng(0, 0),\n' +
+    '    zoom: 2,\n' +
+    '    mapTypeId: $window.google.maps.MapTypeId.ROADMAP\n' +
+    '  };\n' +
+    '\n' +
+    '  ctrl.myMap = {\n' +
+    '    map: null,\n' +
+    '    options: angular.extend({}, initMapOptions),\n' +
+    '    markers: [],\n' +
+    '    selections: []\n' +
+    '  };\n' +
+    '\n' +
+    '  ctrl.boundsChanged = function() {\n' +
+    '    // can get triggered at initial setZoom..\n' +
+    '    if (newBounds) {\n' +
+    '\n' +
+    '      // This expects a google.maps.LatLng object\n' +
+    '      var south = newBounds.getSouthWest().lat();\n' +
+    '      var west = newBounds.getSouthWest().lng();\n' +
+    '      var north = newBounds.getNorthEast().lat();\n' +
+    '      var east = newBounds.getNorthEast().lng();\n' +
+    '\n' +
+    '      ctrl.bounds = {\n' +
+    '        \'south\': south,\n' +
+    '        \'west\': west,\n' +
+    '        \'north\': north,\n' +
+    '        \'east\': east\n' +
+    '      };\n' +
+    '\n' +
+    '      ctrl.mlSearch.clearAdditionalQueries();\n' +
+    '      ctrl.mlSearch.addAdditionalQuery(\n' +
+    '        qb.or(\n' +
+    '          // This assumes a geo facet called `Locations`.\n' +
+    '          // Repeat following line for each geo facet in the app.\n' +
+    '          qb.ext.geospatial(\'Locations\', ctrl.bounds)\n' +
+    '        )\n' +
+    '      );\n' +
+    '\n' +
+    '      ctrl.search();\n' +
+    '    }\n' +
+    '  };\n' +
+    '\n' +
+    '  ctrl.resetMap = function() {\n' +
+    '    ctrl.myMap.options = angular.extend({}, initMapOptions);\n' +
+    '    angular.forEach(ctrl.myMap.selections, function(overlay, index) {\n' +
+    '      overlay.setMap(null);\n' +
+    '    });\n' +
+    '    ctrl.myMap.selections.length = 0;\n' +
+    '  };\n' +
+    '\n' +
+    '  ctrl.showResult = function(result) {\n' +
+    '    var uri = result.uri || result;\n' +
+    '    $state.go(\'root.view\', { uri: uri });\n' +
+    '  };\n' +
+    '}\n' +
+    '</pre></li><li><p>Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:</p><pre hljs="" no-escape="" language="html">\n' +
+    '&lt;ml-google-search-map map="$ctrl.myMap.map" options="$ctrl.myMap.options"\n' +
+    '            facets="$ctrl.response.facets" markers="$ctrl.myMap.markers" bounds-changed="$ctrl.boundsChanged(bounds)"\n' +
+    '            show-result="$ctrl.showResult(uri)" show-context-menu="$ctrl.resetMap()" selections="$ctrl.myMap.selections">\n' +
+    '&lt;/ml-google-search-map>\n' +
+    '\n' +
+    '&lt;ml-google-search-map-legend facets="$ctrl.response.facets">&lt;/ml-google-search-map-legend></pre></li><li><p>Optionally override the height via CSS for the map container:</p><div hljs="" no-escape="" language="css">.map-canvas { height: 400px !important; }</div></li></ol><h4>Improved zooming behavior (for slush-marklogic-node)</h4><p>By default MarkLogic applies a fixed heatmap grid to come up with aggregate results. There is a custom facet though that improves this.</p><ol class="steps"><li><p>Disable search options validation, edit <code>rest-api/config/properties.xml</code>, and change the validate-options setting to false. Run <code>./ml local deploy rest</code> to apply.</p></li><li><p>Download <a href="geo.xqy">geo.xqy</a>, and copy into <code>src/constraint/</code></p></li><li><p>Edit your existing geospatial facet, and wrap it in a custom constraint as follows:</p><div hljs="" no-escape="" language="xml"><constraint name="Locations">&lt;custom> &lt;parse apply="parse-structured" ns="http://marklogic.com/appservices/viz/geo" at="/constraint/geo.xqy"/> &lt;start-facet apply="start" ns="http://marklogic.com/appservices/viz/geo" at="/constraint/geo.xqy"/> &lt;finish-facet apply="finish" ns="http://marklogic.com/appservices/viz/geo" at="/constraint/geo.xqy"/> &lt;/custom> &lt;annotation> &lt;-- insert original range definition here --> &lt;/annotation> &lt;/constraint></constraint></div></li><li><p>Edit <code>ui/app/search/search.controller.js</code>, and replace:</p><pre hljs="" no-escape="" language="js">\n' +
+    '  qb.ext.geospatial(\'Locations\', ctrl.bounds)\n' +
+    '</pre><p>with:</p><pre hljs="" no-escape="" language="js">\n' +
+    '  qb.ext.custom(\'Locations\', qb.ext.geospatialValues(ctrl.bounds))\n' +
+    '</pre></li></ol><h3>Generic steps</h3><ol class="steps"><li><p>Download <a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.js">ml-google-maps-ng.js</a> (<a href="https://raw.github.com/grtjn/ml-google-maps-ng/master/dist/ml-google-maps-ng.min.js">minified version</a>) and put it with your other scripts. Alternatively, you can use Bower to install it automatically:</p><div hljs="" no-escape="" language="bash">bower install [--save] ml-google-maps-ng</div><p>Or if you prefer bleeding edge:</p><div hljs="" no-escape="" language="bash">bower install [--save] git@github.com:grtjn/ml-google-maps-ng.git</div><p>If not using Bower, you\'ll also need to fetch <a href="https://github.com/angular-ui/ui-utils/tree/v0.2.3" rel="external">ui-utils.js (v0.2.3)</a>, and <a href="https://github.com/angular-ui/ui-map/tree/v0.5.0" rel="external">ui-map.js (v0.5.0)</a> yourself.</p></li><li><p>Load ui-utils.js, ui-map.js, and ml-google-maps-ng.js into your HTML page (typically in the end of the <em>BODY</em> of your HTML):</p><pre hljs="" no-escape="" language="html">\n' +
     '&lt;script src=\'/bower_components/angular-ui-utils/ui-utils[.min].js\'>&lt;/script>\n' +
     '&lt;script src=\'/bower_components/angular-ui-map/ui-map[.min].js\'>&lt;/script>\n' +
     '&lt;script src=\'/bower_components/ml-google-maps-ng/dist/ml-google-maps-ng[.min].js\'>&lt;/script></pre><p class="text-muted">Note: You can simplify this by making use of <a href="https://www.npmjs.com/package/wiredep" rel="external">wiredep</a>, optionally together with <a href="https://www.npmjs.com/package/gulp-useref" rel="external">gulp-useref</a>.</p></li><li><p>Include the Google Maps API v3, via:</p><ul><li><p>Directly load into your HTML page. Example:</p><div hljs="" no-escape="" language="html" source="\'<script src=\\\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\\\'></script>\'"></div><p class="text-muted">Note: If you go down this route, ensure that it is loaded prior to angular-google-maps.js! The easiest way to do this is to put loading the google maps api in the HTML head, and all angular code in the HTML body.</p></li></ul><strong>Serving Google Maps in China</strong><p>It is a state demand that all online map providers must use an obscured coordinate system called GCJ-02 (aka Coordinates on Mars). GCJ-02 is WSG-84 based, but added offsets to both latitude and longitude.</p><p>If you display a marker from GCJ-02 coordinates on a GCJ-02 map, the place will be marked correctly.<br>However the offsets can result in a less-than-100 up to 700 meter error from the actual location if you place a GCJ-02 marker on a WSG-84 map and vice versa.</p><p>There is an <a href="https://github.com/googollee/eviltransform" target="_blank">open-source project</a> that can provide approximate translation between GCJ-02 and WSG-84.</p><p>Google also submits to this regulation. They serve this modified system at maps.google.cn.If you manually load the Google Maps API, replace <code>//maps.googleapis.com/maps/api/js</code> with <code>http://maps.google.cn/maps/api/js</code>.</p></li><li><p>Load ml-google-maps-ng.css into your HTML page (typically in the end of the <em>HEAD</em> of your HTML):</p><pre hljs="" no-escape="" language="html">\n' +
@@ -73,10 +146,10 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '  ctrl.resetMap = function() {\n' +
     '    ctrl.myMap.options = angular.extend({}, initMapOptions);\n' +
-    '    angular.forEach(model.searchMap.selections, function(overlay, index) {\n' +
+    '    angular.forEach(ctrl.myMap.selections, function(overlay, index) {\n' +
     '      overlay.setMap(null);\n' +
     '    });\n' +
-    '    model.searchMap.selections.length = 0;\n' +
+    '    ctrl.myMap.selections.length = 0;\n' +
     '  };\n' +
     '\n' +
     '  ctrl.showResult = function(uri) {\n' +

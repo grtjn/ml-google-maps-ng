@@ -7,6 +7,177 @@
             <!--Once you're up and running, visit the <a ui-sref="api">API documentation</a> to learn how to get the most out of it.-->
         </p>
 
+        <h3>For use with slush-marklogic-node</h3>
+        <p>The <a href="https://github.com/marklogic-community/slush-marklogic-node">slush-marklogic-node</a> has been optimized to make pulling in components like this as easy as possible</p>
+
+        <ol class="steps">
+            <!-- 1 -->
+            <li>
+                <div hljs no-escape language="bash">bower install --save ml-google-maps-ng</div>
+            </li>
+
+            <!-- 2 -->
+            <li>
+                <p>
+                  Include this at the end of the <code>&lt;head&gt;</code> of <code>ui/index.html</code>:
+                </p>
+                <div hljs no-escape language="html" source="'<script src=\'//maps.googleapis.com/maps/api/js?v=3.&libraries=drawing&sensor=false\'></script>'">
+                </div>
+            </li>
+
+            <!-- 3 -->
+            <li>
+                <p>
+                  Include <code>'ml.google-maps'</code> as a module dependency in for instance <code>ui/app/search/search.module.js</code>:
+                </p>
+                <div hljs no-escape language="js">angular.module('app.search', [..., 'ml.google-maps']);
+</div>
+            </li>
+            
+            <!-- 4 -->
+            <li>
+                <p>
+                  Edit <code>ui/app/search/search.controller.js</code>, and add:
+                </p>
+                <pre hljs no-escape language="js">
+
+SearchCtrl.$inject = [..., '$state', 'MLQueryBuilder'];
+
+function SearchCtrl(..., $state, qb) {
+  ...
+
+  var initMapOptions = {
+    center: new $window.google.maps.LatLng(0, 0),
+    zoom: 2,
+    mapTypeId: $window.google.maps.MapTypeId.ROADMAP
+  };
+
+  ctrl.myMap = {
+    map: null,
+    options: angular.extend({}, initMapOptions),
+    markers: [],
+    selections: []
+  };
+
+  ctrl.boundsChanged = function() {
+    // can get triggered at initial setZoom..
+    if (newBounds) {
+
+      // This expects a google.maps.LatLng object
+      var south = newBounds.getSouthWest().lat();
+      var west = newBounds.getSouthWest().lng();
+      var north = newBounds.getNorthEast().lat();
+      var east = newBounds.getNorthEast().lng();
+
+      ctrl.bounds = {
+        'south': south,
+        'west': west,
+        'north': north,
+        'east': east
+      };
+
+      ctrl.mlSearch.clearAdditionalQueries();
+      ctrl.mlSearch.addAdditionalQuery(
+        qb.or(
+          // This assumes a geo facet called `Locations`.
+          // Repeat following line for each geo facet in the app.
+          qb.ext.geospatial('Locations', ctrl.bounds)
+        )
+      );
+
+      ctrl.search();
+    }
+  };
+
+  ctrl.resetMap = function() {
+    ctrl.myMap.options = angular.extend({}, initMapOptions);
+    angular.forEach(ctrl.myMap.selections, function(overlay, index) {
+      overlay.setMap(null);
+    });
+    ctrl.myMap.selections.length = 0;
+  };
+
+  ctrl.showResult = function(result) {
+    var uri = result.uri || result;
+    $state.go('root.view', { uri: uri });
+  };
+}
+</pre>
+                <!--p class="muted">
+                    Note: this is the very minimum set of properties required for the map to work.
+                    See the <a ui-sref="api">API documentation</a> for the full list of supported properties.
+                </p-->
+            </li>
+
+            <!-- 5 -->
+            <li>
+                <p>
+                  Add a <code>&lt;ml-google-search-map&gt;</code> and a <code>&lt;ml-google-search-map-legend&gt;</code> element in your template like so:
+                </p>
+                <pre hljs no-escape language="html">
+&lt;ml-google-search-map map="$ctrl.myMap.map" options="$ctrl.myMap.options"
+            facets="$ctrl.response.facets" markers="$ctrl.myMap.markers" bounds-changed="$ctrl.boundsChanged(bounds)"
+            show-result="$ctrl.showResult(uri)" show-context-menu="$ctrl.resetMap()" selections="$ctrl.myMap.selections">
+&lt;/ml-google-search-map>
+
+&lt;ml-google-search-map-legend facets="$ctrl.response.facets">&lt;/ml-google-search-map-legend></pre>
+            </li>
+
+            <!-- 6 -->
+            <li>
+                <p>
+                  Optionally override the height via CSS for the map container:
+                </p>
+                <div hljs no-escape language="css">.map-canvas { height: 400px !important; }</div>
+                <!--div hljs no-escape language="css">.angular-google-map-container { height: 400px; }</div-->
+            </li>
+        </ol>
+
+        <h4>Improved zooming behavior (for slush-marklogic-node)</h4>
+
+        <p>By default MarkLogic applies a fixed heatmap grid to come up with aggregate results. There is a custom facet though that improves this.</p>
+
+        <ol class="steps">
+            <!-- 1 -->
+            <li>
+              <p>Disable search options validation, edit <code>rest-api/config/properties.xml</code>, and change the validate-options setting to false. Run <code>./ml local deploy rest</code> to apply.</p>
+            </li>
+
+            <!-- 2 -->
+            <li>
+              <p>Download <a href="geo.xqy">geo.xqy</a>, and copy into <code>src/constraint/</code></p>
+            </li>
+
+            <!-- 3 -->
+            <li>
+              <p>Edit your existing geospatial facet, and wrap it in a custom constraint as follows:</p>
+<div hljs no-escape language="xml">  <constraint name="Locations">
+    &lt;custom>
+      &lt;parse apply="parse-structured" ns="http://marklogic.com/appservices/viz/geo" at="/constraint/geo.xqy"/>
+      &lt;start-facet apply="start" ns="http://marklogic.com/appservices/viz/geo" at="/constraint/geo.xqy"/>
+      &lt;finish-facet apply="finish" ns="http://marklogic.com/appservices/viz/geo" at="/constraint/geo.xqy"/>
+    &lt;/custom>
+    &lt;annotation>
+       &lt;-- insert original range definition here -->
+    &lt;/annotation>
+  &lt;/constraint></div>
+</li>
+
+          <!-- 4 -->
+          <li>
+            <p>Edit <code>ui/app/search/search.controller.js</code>, and replace:</p>
+<pre hljs no-escape language="js">
+  qb.ext.geospatial('Locations', ctrl.bounds)
+</pre>
+            <p>with:</p>
+<pre hljs no-escape language="js">
+  qb.ext.custom('Locations', qb.ext.geospatialValues(ctrl.bounds))
+</pre>
+          </li>
+        </ol>
+
+        <h3>Generic steps</h3>
+
         <ol class="steps">
             <!-- 1 -->
             <li>
@@ -180,10 +351,10 @@ function MyCtrl($scope) {
 
   ctrl.resetMap = function() {
     ctrl.myMap.options = angular.extend({}, initMapOptions);
-    angular.forEach(model.searchMap.selections, function(overlay, index) {
+    angular.forEach(ctrl.myMap.selections, function(overlay, index) {
       overlay.setMap(null);
     });
-    model.searchMap.selections.length = 0;
+    ctrl.myMap.selections.length = 0;
   };
 
   ctrl.showResult = function(uri) {
